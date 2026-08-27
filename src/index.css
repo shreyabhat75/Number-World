@@ -2840,3 +2840,844 @@ body {
   position: relative;
   z-index: 1;
 }
+
+/* ============================================================
+   DIVISIBILITY RULES PAGE
+   ============================================================ */
+
+.divisibility-page {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.header-sub {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.divisibility-mascot-row {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0 24px;
+}
+
+.div-number-input-section {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.div-number-input-section h3 {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.div-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.div-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid #e5e7eb;
+  background: white;
+  font-size: 20px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.div-btn:hover {
+  border-color: var(--purple);
+  background: #faf5ff;
+}
+
+.div-number-input {
+  width: 120px;
+  height: 52px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 900;
+  border: 3px solid var(--purple);
+  border-radius: var(--radius-lg);
+  background: white;
+  color: var(--text-primary);
+  font-family: inherit;
+  outline: none;
+}
+
+.div-slider {
+  width: 100%;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: linear-gradient(90deg, #bbf7d0, #60a5fa, #a78bfa);
+  border-radius: 10px;
+  outline: none;
+  margin-bottom: 12px;
+}
+
+.div-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--purple);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+}
+
+.div-quick-nums {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.div-quick-nums span {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-secondary);
+  align-self: center;
+}
+
+.quick-num {
+  padding: 6px 14px;
+  border: 2px solid #e5e7eb;
+  border-radius: 16px;
+  background: white;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.quick-num:hover {
+  border-color: var(--purple);
+  background: #faf5ff;
+}
+
+.quick-num.active {
+  border-color: var(--purple);
+  background: var(--purple);
+  color: white;
+}
+
+.divisibility-summary {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.summary-big {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.summary-num {
+  font-size: 36px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.summary-text {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.divisibility-rules-section h2 {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.rules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.divisibility-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  border-top: 4px solid;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow 0.3s;
+}
+
+.div-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  cursor: pointer;
+}
+
+.div-card-number {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.div-card-info {
+  flex: 1;
+}
+
+.div-card-info h4 {
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.div-card-info p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.div-card-result {
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.div-card-result.yes {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.div-card-result.no {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.div-card-expanded {
+  padding: 0 16px 16px;
+  overflow: hidden;
+}
+
+.div-card-mascot {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--purple);
+  margin-bottom: 12px;
+  font-style: italic;
+}
+
+.div-card-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.div-card-examples span {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.example-num {
+  padding: 4px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: white;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.example-num:hover {
+  border-color: var(--purple);
+  background: #faf5ff;
+}
+
+.rule-explanation {
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: var(--radius-md);
+}
+
+.rule-explanation p {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.digit-row {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.rule-digit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+  font-size: 20px;
+  font-weight: 800;
+  background: white;
+}
+
+.rule-digit.highlighted {
+  background: #fef3c7;
+  border-color: #fbbf24;
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
+  animation: digitPulse 1s ease infinite;
+}
+
+@keyframes digitPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.rule-step-result {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.rule-success {
+  font-size: 16px;
+  font-weight: 800;
+  color: #166534;
+  margin-top: 8px;
+}
+
+.rule-fail {
+  font-size: 16px;
+  font-weight: 800;
+  color: #991b1b;
+  margin-top: 8px;
+}
+
+.digit-sum-animation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.sum-digit {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--purple);
+}
+
+.combined-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.check-item {
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.check-item.pass {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.check-item.fail {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.rule-of-seven {
+  background: linear-gradient(135deg, #fef2f2, #fff7ed);
+  border: 2px solid #fca5a5;
+}
+
+.challenge-label {
+  font-size: 14px;
+  font-weight: 800;
+  color: #991b1b;
+  margin-bottom: 8px;
+}
+
+.seven-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.seven-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: white;
+  border-radius: 8px;
+  border-left: 3px solid #ef4444;
+}
+
+.step-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  min-width: 70px;
+}
+
+.step-value {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.divisibility-tester-section {
+  margin-bottom: 32px;
+}
+
+.divisibility-tester {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+}
+
+.divisibility-tester h3 {
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.tester-subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.tester-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.tester-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 10px;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+}
+
+.tester-card.yes {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.tester-card.no {
+  background: #f1f5f9;
+  color: #94a3b8;
+}
+
+.tester-divisor {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.tester-icon {
+  font-size: 22px;
+}
+
+.tester-quotient {
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.tester-remainder {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.divisibility-remainder-section {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.divisibility-remainder-section h3 {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.remainder-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.remainder-controls {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.remainder-btn {
+  padding: 8px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background: white;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.remainder-btn.active {
+  border-color: var(--purple);
+  background: var(--purple);
+  color: white;
+}
+
+.remainder-viz {
+  text-align: center;
+}
+
+.remainder-viz h4 {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.remainder-groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.remainder-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px;
+  background: #f0fdf4;
+  border-radius: 8px;
+  border: 2px solid #86efac;
+}
+
+.remainder-leftover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px;
+  background: #fef2f2;
+  border-radius: 8px;
+  border: 2px dashed #fca5a5;
+}
+
+.group-items {
+  display: flex;
+  gap: 2px;
+  font-size: 16px;
+}
+
+.group-item.leftover {
+  color: #ef4444;
+}
+
+.group-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.remainder-equation {
+  font-size: 18px;
+  font-weight: 800;
+  margin: 12px 0 6px;
+}
+
+.remainder-divisible {
+  font-size: 16px;
+  font-weight: 700;
+  color: #166534;
+}
+
+.remainder-not-divisible {
+  font-size: 16px;
+  font-weight: 700;
+  color: #991b1b;
+}
+
+.divisibility-matrix-section {
+  margin-bottom: 32px;
+}
+
+.divisibility-matrix {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+}
+
+.divisibility-matrix h3 {
+  font-size: 20px;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.matrix-scroll {
+  overflow-x: auto;
+}
+
+.matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.matrix-table th {
+  padding: 10px 12px;
+  font-weight: 800;
+  background: #f8fafc;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.matrix-table td {
+  padding: 10px 12px;
+  text-align: center;
+  border-bottom: 1px solid #f1f5f9;
+  font-weight: 600;
+}
+
+.matrix-number {
+  font-weight: 800;
+  text-align: left !important;
+}
+
+.matrix-cell.yes {
+  color: #166534;
+  font-weight: 800;
+}
+
+.matrix-cell.no {
+  color: #d1d5db;
+}
+
+.divisibility-challenge-section {
+  margin-bottom: 32px;
+}
+
+.div-challenge {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+}
+
+.div-challenge-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.div-challenge-header h3 {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.div-challenge-score {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.div-challenge-question {
+  text-align: center;
+}
+
+.div-challenge-question h4 {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.div-challenge-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.div-challenge-options.rule-match {
+  grid-template-columns: 1fr;
+}
+
+.div-opt {
+  padding: 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: var(--radius-md);
+  background: white;
+  font-size: 18px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.div-opt:hover:not(:disabled) {
+  border-color: var(--purple);
+  background: #faf5ff;
+}
+
+.div-opt.correct {
+  border-color: var(--green);
+  background: #dcfce7;
+  color: #166534;
+}
+
+.div-opt.wrong {
+  border-color: var(--red);
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.rule-opt {
+  text-align: left;
+  font-size: 15px;
+}
+
+.div-challenge-result {
+  padding: 14px;
+  border-radius: var(--radius-md);
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.div-challenge-result.correct {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.div-challenge-result.wrong {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.divisibility-cheatsheet {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 32px;
+}
+
+.divisibility-cheatsheet h3 {
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.cheat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+.cheat-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-left: 4px solid;
+  background: #f8fafc;
+  border-radius: 0 8px 8px 0;
+}
+
+.cheat-num {
+  font-size: 22px;
+  font-weight: 900;
+  min-width: 30px;
+}
+
+.cheat-rule {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+  .rules-grid {
+    grid-template-columns: 1fr;
+  }
+  .tester-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .cheat-grid {
+    grid-template-columns: 1fr;
+  }
+  .div-challenge-options {
+    grid-template-columns: 1fr;
+  }
+}

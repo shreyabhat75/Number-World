@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { key: 'even-odd', icon: '🍎', label: 'Even & Odd' },
   { key: 'integers', icon: '➕➖', label: 'Integers' },
   { key: 'primes', icon: '⭐', label: 'Prime Numbers' },
+  { key: 'divisibility', icon: '🔢', label: 'Divisibility Rules' },
   { key: 'factor-tree', icon: '🌳', label: 'Prime Factor Tree' },
   { key: 'quiz', icon: '🎮', label: 'Number Detective' },
   { key: 'achievements', icon: '🏆', label: 'Achievements' },

@@ -95,6 +95,14 @@ export const ACHIEVEMENTS = [
     requirement: { type: 'level', count: 5 },
     xp: 250,
   },
+  {
+    id: 'divisibility_detective',
+    title: 'Divisibility Detective',
+    description: 'Explore 15 numbers in Divisibility Rules',
+    icon: '🔢',
+    requirement: { type: 'explore_div', count: 15 },
+    xp: 150,
+  },
 ];
 
 export function checkAchievements(progress) {
@@ -146,6 +154,9 @@ export function checkAchievements(progress) {
         break;
       case 'level':
         earned = (progress.level || 1) >= req.count;
+        break;
+      case 'explore_div':
+        earned = (progress.numbersExplored || []).length >= req.count;
         break;
       default:
         break;

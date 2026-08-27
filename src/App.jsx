@@ -7,6 +7,7 @@ import EvenOdd from './pages/EvenOdd';
 import Integers from './pages/Integers';
 import PrimeNumbers from './pages/PrimeNumbers';
 import PrimeFactorTreePage from './pages/PrimeFactorTreePage';
+import DivisibilityRules from './pages/DivisibilityRules';
 import QuizPage from './pages/QuizPage';
 import Achievements from './pages/Achievements';
 import Settings from './pages/Settings';
@@ -117,6 +118,8 @@ export default function App() {
         return <Integers />;
       case 'primes':
         return <PrimeNumbers />;
+      case 'divisibility':
+        return <DivisibilityRules onExplore={handleExplore} />;
       case 'factor-tree':
         return <PrimeFactorTreePage />;
       case 'quiz':
