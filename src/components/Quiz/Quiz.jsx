@@ -1,6 +1,37 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { generateQuestion } from '../../utils/quizUtils';
+
+function getExplanation(question, selectedArr, isCorrect) {
+  if (isCorrect) return null;
+  const n = question.n;
+  if (question.type === 'identify') {
+    const correct = question.correctAnswers;
+    const missed = correct.filter(c => !selectedArr.includes(c));
+    const wrongPick = selectedArr.filter(s => !correct.includes(s));
+    let parts = [];
+    if (missed.length > 0) parts.push(`You missed: ${missed.join(', ')}`);
+    if (wrongPick.length > 0) parts.push(`Incorrect picks: ${wrongPick.join(', ')}`);
+    parts.push(`${n} is: ${correct.join(', ')}`);
+    return parts.join('. ');
+  }
+  if (question.type === 'find_prime') {
+    return `A prime number has exactly 2 factors (1 and itself). ${question.correctAnswer} is prime because it can only be divided evenly by 1 and ${question.correctAnswer}.`;
+  }
+  if (question.type === 'find_composite') {
+    return `A composite number has more than 2 factors. ${question.correctAnswer} is composite because it can be divided by other numbers besides 1 and itself.`;
+  }
+  if (question.type === 'find_even') {
+    return `Even numbers are divisible by 2 with no remainder. ${question.correctAnswer} ÷ 2 = ${Number(question.correctAnswer) / 2}.`;
+  }
+  if (question.type === 'find_odd') {
+    return `Odd numbers leave a remainder of 1 when divided by 2. ${question.correctAnswer} ÷ 2 = ${Math.floor(Number(question.correctAnswer) / 2)} remainder 1.`;
+  }
+  if (question.type === 'find_negative') {
+    return `Negative numbers are less than 0. ${question.correctAnswer} is below zero on the number line.`;
+  }
+  return '';
+}
 
 export default function Quiz({ difficulty = 1, onComplete, onCorrect, onWrong }) {
   const [question, setQuestion] = useState(null);
@@ -11,9 +42,15 @@ export default function Quiz({ difficulty = 1, onComplete, onCorrect, onWrong })
   const [total, setTotal] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
 
-  useEffect(() => {
+  const loadNext = useCallback(() => {
+    setSelected([]);
+    setSubmitted(false);
     setQuestion(generateQuestion(difficulty));
   }, [difficulty]);
+
+  useEffect(() => {
+    loadNext();
+  }, [loadNext]);
 
   const isMulti = question?.multi;
 
@@ -53,13 +90,16 @@ export default function Quiz({ difficulty = 1, onComplete, onCorrect, onWrong })
     }
   };
 
-  const nextQuestion = () => {
-    setSelected([]);
-    setSubmitted(false);
-    setQuestion(generateQuestion(difficulty));
-  };
+  const isFullyCorrect = submitted && (() => {
+    if (isMulti) {
+      const correctSet = new Set(question.correctAnswers);
+      const selectedSet = new Set(selected);
+      return correctSet.size === selectedSet.size && [...correctSet].every(c => selectedSet.has(c));
+    }
+    return selected[0] === question.correctAnswer;
+  })();
 
-  if (!question) return null;
+  const explanation = submitted ? getExplanation(question, selected, isFullyCorrect) : null;
 
   const getOptionState = (option) => {
     if (!submitted) {
@@ -78,14 +118,7 @@ export default function Quiz({ difficulty = 1, onComplete, onCorrect, onWrong })
     return 'dimmed';
   };
 
-  const isFullyCorrect = submitted && (() => {
-    if (isMulti) {
-      const correctSet = new Set(question.correctAnswers);
-      const selectedSet = new Set(selected);
-      return correctSet.size === selectedSet.size && [...correctSet].every(c => selectedSet.has(c));
-    }
-    return selected[0] === question.correctAnswer;
-  })();
+  if (!question) return null;
 
   return (
     <div className="quiz-container">
@@ -108,7 +141,7 @@ export default function Quiz({ difficulty = 1, onComplete, onCorrect, onWrong })
 
       <AnimatePresence mode="wait">
         <motion.div
-          key={question.question}
+          key={total}
           className="quiz-question-area"
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -131,7 +164,7 @@ export default function Quiz({ difficulty = 1, onComplete, onCorrect, onWrong })
           )}
 
           {isMulti && !submitted && (
-            <p className="quiz-hint">Select all that apply, then press Submit</p>
+            <p className="quiz-hint">Tap to select, then press Submit</p>
           )}
 
           <div className={`quiz-options ${isMulti ? 'multi' : ''}`}>
@@ -139,21 +172,18 @@ export default function Quiz({ difficulty = 1, onComplete, onCorrect, onWrong })
               const state = getOptionState(option);
               return (
                 <motion.button
-                  key={`${option}-${i}`}
+                  key={`${total}-${option}-${i}`}
                   className={`quiz-option ${state}`}
                   onClick={() => toggleOption(option)}
-                  whileHover={!submitted ? { scale: 1.05, y: -2 } : {}}
-                  whileTap={!submitted ? { scale: 0.95 } : {}}
-                  initial={{ opacity: 0, y: 20 }}
+                  whileHover={!submitted ? { scale: 1.03 } : {}}
+                  whileTap={!submitted ? { scale: 0.97 } : {}}
+                  initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
                   disabled={submitted}
                 >
-                  {isMulti && !submitted && (
+                  {isMulti && (
                     <span className="checkbox">{selected.includes(option) ? '☑' : '☐'}</span>
-                  )}
-                  {isMulti && submitted && question.correctAnswers.includes(option) && (
-                    <span className="checkbox">☑</span>
                   )}
                   {option}
                 </motion.button>
@@ -161,29 +191,16 @@ export default function Quiz({ difficulty = 1, onComplete, onCorrect, onWrong })
             })}
           </div>
 
-          {isMulti && !submitted && selected.length > 0 && (
+          {!submitted && (
             <motion.button
               className="submit-btn"
               onClick={handleSubmit}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              disabled={selected.length === 0}
+              style={{ opacity: selected.length === 0 ? 0.5 : 1 }}
+              whileHover={selected.length > 0 ? { scale: 1.05 } : {}}
+              whileTap={selected.length > 0 ? { scale: 0.95 } : {}}
             >
-              Submit ({selected.length} selected)
-            </motion.button>
-          )}
-
-          {!isMulti && !submitted && selected.length > 0 && (
-            <motion.button
-              className="submit-btn"
-              onClick={handleSubmit}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Submit
+              {isMulti ? `Submit (${selected.length} selected)` : 'Submit'}
             </motion.button>
           )}
 
@@ -193,7 +210,6 @@ export default function Quiz({ difficulty = 1, onComplete, onCorrect, onWrong })
                 className={`quiz-result ${isFullyCorrect ? 'correct' : 'wrong'}`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
               >
                 {isFullyCorrect ? (
                   <>
@@ -205,9 +221,8 @@ export default function Quiz({ difficulty = 1, onComplete, onCorrect, onWrong })
                     <span className="result-emoji">🤔</span>
                     <span>
                       {isMulti
-                        ? `Not quite! The correct answers are: ${question.correctAnswers.join(', ')}`
+                        ? `Not quite! Correct answers: ${question.correctAnswers.join(', ')}`
                         : `Not quite! The answer is ${question.correctAnswer}.`}
-                      {' '}Try the next one!
                     </span>
                   </>
                 )}
@@ -215,10 +230,20 @@ export default function Quiz({ difficulty = 1, onComplete, onCorrect, onWrong })
             )}
           </AnimatePresence>
 
+          {submitted && explanation && (
+            <motion.div
+              className="quiz-explanation"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+            >
+              <p>💡 {explanation}</p>
+            </motion.div>
+          )}
+
           {submitted && (
             <motion.button
               className="next-btn"
-              onClick={nextQuestion}
+              onClick={loadNext}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               whileHover={{ scale: 1.05 }}

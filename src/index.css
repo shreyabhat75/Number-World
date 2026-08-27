@@ -2286,8 +2286,13 @@ body {
 
 .quiz-option.selected {
   border-color: var(--purple);
-  background: #faf5ff;
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+  background: #ede9fe;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25);
+  transform: scale(1.02);
+}
+
+.quiz-option.selected .checkbox {
+  color: var(--purple);
 }
 
 .quiz-option.missed {
@@ -2295,6 +2300,22 @@ body {
   background: #fffbeb;
   color: #92400e;
   opacity: 1;
+}
+
+.quiz-explanation {
+  background: #eff6ff;
+  border: 2px solid #93c5fd;
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  margin: 12px 0;
+  overflow: hidden;
+}
+
+.quiz-explanation p {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e40af;
+  line-height: 1.6;
 }
 
 .quiz-options.multi {
