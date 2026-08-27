@@ -1,9 +1,7 @@
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import { curriculum } from '../../curriculum';
 
-export default function ModulePage({ subjectId, moduleId }) {
-  const navigate = useNavigate();
+export default function ModulePage({ subjectId, moduleId, onNavigate }) {
   const subject = curriculum.subjects.find(s => s.id === subjectId);
   const mod = subject?.modules.find(m => m.id === moduleId);
 
@@ -24,7 +22,7 @@ export default function ModulePage({ subjectId, moduleId }) {
       animate={{ opacity: 1 }}
     >
       <div className="module-page-header">
-        <button className="back-button" onClick={() => navigate('/')} title="Back to Home">
+        <button className="back-button" onClick={() => onNavigate?.('home')} title="Back to Home">
           ← Home
         </button>
         <div className="module-page-info">
@@ -41,8 +39,8 @@ export default function ModulePage({ subjectId, moduleId }) {
         {topics.map((topic, i) => (
           <motion.button
             key={topic.id}
-            className="topic-card"
-            onClick={() => navigate(`/${topic.route}`)}
+            className="module-topic-card"
+            onClick={() => onNavigate?.(topic.route)}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}

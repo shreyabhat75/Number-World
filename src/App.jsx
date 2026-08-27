@@ -81,12 +81,20 @@ export default function App() {
 
   const handleDailyComplete = useCallback(() => {
     const newXP = addXP(25);
+    const newCount = (progress.dailyChallenges || 0) + 1;
     persistProgress({
       xp: newXP.xp,
       level: newXP.level,
-      dailyChallenges: (progress.dailyChallenges || 0) + 1,
+      dailyChallenges: newCount,
     });
     setConfettiActive(true);
+    const { newlyUnlocked } = checkAchievements({ ...progress, dailyChallenges: newCount, xp: newXP.xp, level: newXP.level });
+    if (newlyUnlocked.length > 0) {
+      setNewAchievements(prev => [...prev, ...newlyUnlocked]);
+      const achievementXP = newlyUnlocked.reduce((sum, a) => sum + a.xp, 0);
+      const finalXP = addXP(achievementXP);
+      persistProgress({ xp: finalXP.xp, level: finalXP.level, achievements: [...(progress.achievements || []), ...newlyUnlocked.map(a => a.id)] });
+    }
   }, [progress, persistProgress]);
 
   const handleSettingsChange = useCallback((newSettings) => {
@@ -135,7 +143,7 @@ export default function App() {
           if (currentPage === 'divisibility') extraProps.onExplore = handleExplore;
           if (currentPage === 'factor-tree') extraProps.onTreeComplete = handleTreeComplete;
           return (
-            <TopicPage topic={topic}>
+            <TopicPage topic={topic} onBack={() => handleNavigate('home')}>
               <Component {...extraProps} />
             </TopicPage>
           );

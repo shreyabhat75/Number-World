@@ -69,7 +69,7 @@ export default function DailyChallenge({ onComplete, dailyCompleted }) {
   const handleNext = () => {
     if (questionIndex + 1 >= challenges.length) {
       setFinished(true);
-      if (score + (isFullyCorrect ? 0 : 0) >= 3) {
+      if (score + (isFullyCorrect ? 1 : 0) >= 3) {
         onComplete?.();
       }
       return;

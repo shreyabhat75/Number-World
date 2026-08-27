@@ -1,5 +1,5 @@
 /* ============================================================
-   NUMBER WORLD — Global Styles
+   APTIFY — Global Styles
    ============================================================ */
 
 :root {
@@ -11,10 +11,16 @@
   --orange: #f97316;
   --pink: #ec4899;
   --red: #ef4444;
+  --purple-soft: #f3f0ff;
+  --blue-soft: #eff6ff;
   --bg-primary: #f0f4ff;
   --bg-secondary: #ffffff;
+  --surface: #ffffff;
+  --border: #e5e7eb;
+  --gray-200: #e5e7eb;
   --text-primary: #1e293b;
   --text-secondary: #64748b;
+  --text-tertiary: #94a3b8;
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
   --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
   --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
@@ -22,6 +28,7 @@
   --radius-md: 12px;
   --radius-lg: 20px;
   --radius-xl: 28px;
+  --radius-full: 9999px;
   --sidebar-width: 260px;
 }
 
@@ -4512,6 +4519,19 @@ body {
   color: var(--text-secondary);
 }
 
+.loading-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border);
+  border-top-color: var(--purple);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* ============================================================
    MODULE PAGE COMPONENT
    ============================================================ */
@@ -4557,7 +4577,7 @@ body {
   gap: 16px;
 }
 
-.topic-card {
+.module-topic-card {
   background: var(--surface);
   border: 2px solid var(--border);
   border-radius: var(--radius-lg);
@@ -4570,7 +4590,7 @@ body {
   gap: 8px;
 }
 
-.topic-card:hover {
+.module-topic-card:hover {
   border-color: var(--purple);
   box-shadow: 0 4px 12px var(--shadow-md);
 }

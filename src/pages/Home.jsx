@@ -54,7 +54,7 @@ export default function Home({ onNavigate, xp, level, onDailyComplete, dailyComp
             animate={{ scale: [1, 1.02, 1] }}
             transition={{ duration: 3, repeat: Infinity }}
           >
-            🌈 NUMBER WORLD
+            🌈 APTIFY
           </motion.h1>
           <p className="hero-subtitle">Explore numbers. Discover patterns. Become a Number Detective!</p>
           

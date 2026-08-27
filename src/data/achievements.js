@@ -106,7 +106,7 @@ export const ACHIEVEMENTS = [
 ];
 
 export function checkAchievements(progress) {
-  const unlocked = [...progress.achievements];
+  const unlocked = [...(progress.achievements || [])];
   const newlyUnlocked = [];
   
   ACHIEVEMENTS.forEach(achievement => {

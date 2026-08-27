@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 
 const DIFFICULTY_COLORS = {
   beginner: '#10b981',
@@ -14,8 +13,7 @@ const TYPE_LABELS = {
   challenge: '🏆 Challenge',
 };
 
-export default function TopicPage({ topic, children }) {
-  const navigate = useNavigate();
+export default function TopicPage({ topic, onBack, children }) {
   const diffColor = DIFFICULTY_COLORS[topic.difficulty] || '#6b7280';
 
   return (
@@ -26,7 +24,7 @@ export default function TopicPage({ topic, children }) {
       transition={{ duration: 0.3 }}
     >
       <div className="topic-page-header">
-        <button className="back-button" onClick={() => navigate(-1)} title="Go back">
+        <button className="back-button" onClick={() => onBack?.()} title="Go back">
           ← Back
         </button>
         <div className="topic-page-meta">
