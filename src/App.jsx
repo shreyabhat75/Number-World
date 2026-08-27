@@ -81,6 +81,20 @@ function AppInner() {
     }
   }, [currentStudent, fractionsBuilt, addXP, checkAndUnlockAchievements]);
 
+  const handleTreeComplete = useCallback(async (result) => {
+    if (!currentStudent) return;
+    await addXP(result.xp || 25);
+    await completeTree(result.number);
+    setConfettiActive(true);
+    const newlyUnlocked = await checkAndUnlockAchievements({
+      treesCompleted: (treeProgress?.trees_completed || 0) + 1,
+    });
+    if (newlyUnlocked.length > 0) {
+      setNewAchievements(prev => [...prev, ...newlyUnlocked]);
+      for (const a of newlyUnlocked) await addXP(a.xp);
+    }
+  }, [currentStudent, addXP, completeTree, checkAndUnlockAchievements, treeProgress]);
+
   const handleQuizCorrect = useCallback(async () => {
     if (!currentStudent) return;
     if (settings.soundEffects) playCorrectSound();
@@ -165,7 +179,7 @@ function AppInner() {
       case 'divisibility':
         return <DivisibilityRules onExplore={handleExplore} />;
       case 'factor-tree':
-        return <PrimeFactorTreePage />;
+        return <PrimeFactorTreePage onTreeComplete={handleTreeComplete} />;
       case 'quiz':
         return <QuizPage onCorrect={handleQuizCorrect} onWrong={handleQuizWrong} />;
       case 'achievements':
