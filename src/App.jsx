@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import Layout from './components/Layout/Layout';
 import Home from './pages/Home';
 import NumberExplorer from './pages/NumberExplorer';
@@ -13,8 +13,7 @@ import Achievements from './pages/Achievements';
 import Settings from './pages/Settings';
 import Confetti from './components/Confetti/Confetti';
 import { getProgress, saveState, addXP, clearAllState } from './utils/storage';
-import { checkAchievements, ACHIEVEMENTS } from './data/achievements';
-import { isPrime, isEven, isOdd } from './utils/numberUtils';
+import { checkAchievements } from './data/achievements';
 
 export default function App() {
   const [progress, setProgress] = useState(() => getProgress());
@@ -104,6 +103,20 @@ export default function App() {
     setProgress(getProgress());
   }, []);
 
+  const handleTreeComplete = useCallback((result) => {
+    const xp = result.xp || 25;
+    const newXP = addXP(xp);
+    persistProgress({ xp: newXP.xp, level: newXP.level, treesCompleted: (progress.treesCompleted || 0) + 1 });
+    setConfettiActive(true);
+    const { newlyUnlocked } = checkAchievements({ ...progress, treesCompleted: (progress.treesCompleted || 0) + 1, xp: newXP.xp, level: newXP.level });
+    if (newlyUnlocked.length > 0) {
+      setNewAchievements(prev => [...prev, ...newlyUnlocked]);
+      const achievementXP = newlyUnlocked.reduce((sum, a) => sum + a.xp, 0);
+      const finalXP = addXP(achievementXP);
+      persistProgress({ xp: finalXP.xp, level: finalXP.level, achievements: [...(progress.achievements || []), ...newlyUnlocked.map(a => a.id)] });
+    }
+  }, [progress, persistProgress]);
+
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
@@ -121,7 +134,7 @@ export default function App() {
       case 'divisibility':
         return <DivisibilityRules onExplore={handleExplore} />;
       case 'factor-tree':
-        return <PrimeFactorTreePage />;
+        return <PrimeFactorTreePage onTreeComplete={handleTreeComplete} />;
       case 'quiz':
         return <QuizPage onCorrect={handleQuizCorrect} onWrong={handleQuizWrong} />;
       case 'achievements':
