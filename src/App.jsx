@@ -1,19 +1,14 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, Suspense, lazy } from 'react';
 import Layout from './components/Layout/Layout';
+import TopicPage from './components/TopicPage/TopicPage';
 import Home from './pages/Home';
-import NumberExplorer from './pages/NumberExplorer';
-import NaturalNumbers from './pages/NaturalNumbers';
-import EvenOdd from './pages/EvenOdd';
-import Integers from './pages/Integers';
-import PrimeNumbers from './pages/PrimeNumbers';
-import PrimeFactorTreePage from './pages/PrimeFactorTreePage';
-import DivisibilityRules from './pages/DivisibilityRules';
-import QuizPage from './pages/QuizPage';
 import Achievements from './pages/Achievements';
 import Settings from './pages/Settings';
+const QuizPage = lazy(() => import('./pages/QuizPage'));
 import Confetti from './components/Confetti/Confetti';
 import { getProgress, saveState, addXP, clearAllState } from './utils/storage';
 import { checkAchievements } from './data/achievements';
+import { getTopicByRoute } from './curriculum';
 
 export default function App() {
   const [progress, setProgress] = useState(() => getProgress());
@@ -121,28 +116,32 @@ export default function App() {
     switch (currentPage) {
       case 'home':
         return <Home onNavigate={handleNavigate} xp={progress.xp} level={progress.level} onDailyComplete={handleDailyComplete} dailyCompleted={false} />;
-      case 'explorer':
-        return <NumberExplorer onExplore={handleExplore} />;
-      case 'natural':
-        return <NaturalNumbers />;
-      case 'even-odd':
-        return <EvenOdd />;
-      case 'integers':
-        return <Integers />;
-      case 'primes':
-        return <PrimeNumbers />;
-      case 'divisibility':
-        return <DivisibilityRules onExplore={handleExplore} />;
-      case 'factor-tree':
-        return <PrimeFactorTreePage onTreeComplete={handleTreeComplete} />;
       case 'quiz':
-        return <QuizPage onCorrect={handleQuizCorrect} onWrong={handleQuizWrong} />;
+        return (
+          <Suspense fallback={<div className="topic-loading"><div className="loading-spinner" /><p>Loading quiz...</p></div>}>
+            <QuizPage onCorrect={handleQuizCorrect} onWrong={handleQuizWrong} />
+          </Suspense>
+        );
       case 'achievements':
         return <Achievements unlockedAchievements={progress.achievements || []} />;
       case 'settings':
         return <Settings settings={progress.settings || { soundEffects: true, animations: true, reducedMotion: false }} onSettingsChange={handleSettingsChange} onResetProgress={handleResetProgress} />;
-      default:
+      default: {
+        const topic = getTopicByRoute(currentPage);
+        if (topic && topic.component) {
+          const Component = topic.component;
+          const extraProps = {};
+          if (currentPage === 'explorer') extraProps.onExplore = handleExplore;
+          if (currentPage === 'divisibility') extraProps.onExplore = handleExplore;
+          if (currentPage === 'factor-tree') extraProps.onTreeComplete = handleTreeComplete;
+          return (
+            <TopicPage topic={topic}>
+              <Component {...extraProps} />
+            </TopicPage>
+          );
+        }
         return <Home onNavigate={handleNavigate} xp={progress.xp} level={progress.level} onDailyComplete={handleDailyComplete} dailyCompleted={false} />;
+      }
     }
   };
 

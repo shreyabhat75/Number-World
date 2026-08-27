@@ -1,20 +1,23 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import XPBar from '../XPBar/XPBar';
+import { getNavSections } from '../../curriculum';
 
-const NAV_ITEMS = [
+const NAV_SECTIONS = getNavSections();
+
+const TOP_NAV = [
   { key: 'home', icon: '🏠', label: 'Home' },
-  { key: 'explorer', icon: '🔍', label: 'Number Explorer' },
-  { key: 'natural', icon: '🌱', label: 'Natural & Whole' },
-  { key: 'even-odd', icon: '🍎', label: 'Even & Odd' },
-  { key: 'integers', icon: '➕➖', label: 'Integers' },
-  { key: 'primes', icon: '⭐', label: 'Prime Numbers' },
-  { key: 'divisibility', icon: '🔢', label: 'Divisibility Rules' },
-  { key: 'factor-tree', icon: '🌳', label: 'Prime Factor Tree' },
+];
+
+const BOTTOM_NAV = [
   { key: 'quiz', icon: '🎮', label: 'Number Detective' },
   { key: 'achievements', icon: '🏆', label: 'Achievements' },
   { key: 'settings', icon: '⚙️', label: 'Settings' },
 ];
+
+function isActiveRoute(currentPage, route) {
+  return currentPage === route;
+}
 
 export default function Layout({ children, currentPage, onNavigate, xp, level, settings }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -25,10 +28,61 @@ export default function Layout({ children, currentPage, onNavigate, xp, level, s
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
           <span className="sidebar-logo">🌈</span>
-          <span className="sidebar-title">Number World</span>
+          <span className="sidebar-title">APTIFY</span>
         </div>
+
         <nav className="sidebar-nav">
-          {NAV_ITEMS.map(item => (
+          {TOP_NAV.map(item => (
+            <button
+              key={item.key}
+              className={`nav-item ${currentPage === item.key ? 'active' : ''}`}
+              onClick={() => { onNavigate(item.key); setSidebarOpen(false); }}
+            >
+              <span className="nav-icon">{item.icon}</span>
+              <span className="nav-label">{item.label}</span>
+              {currentPage === item.key && (
+                <motion.div className="nav-indicator" layoutId="navIndicator" />
+              )}
+            </button>
+          ))}
+
+          {NAV_SECTIONS.map(subject => (
+            <div key={subject.id} className="nav-section">
+              <div className="nav-section-title">{subject.title}</div>
+              {subject.modules.map(mod => (
+                <div key={mod.id} className="nav-module">
+                  {mod.topics.length > 0 ? (
+                    mod.topics
+                      .filter(t => t.route)
+                      .sort((a, b) => (a.order || 0) - (b.order || 0))
+                      .map(topic => (
+                        <button
+                          key={topic.id}
+                          className={`nav-item nav-item-topic ${isActiveRoute(currentPage, topic.route) ? 'active' : ''}`}
+                          onClick={() => { onNavigate(topic.route); setSidebarOpen(false); }}
+                        >
+                          <span className="nav-icon">{topic.icon}</span>
+                          <span className="nav-label">{topic.title}</span>
+                          {isActiveRoute(currentPage, topic.route) && (
+                            <motion.div className="nav-indicator" layoutId="navIndicator" />
+                          )}
+                        </button>
+                      ))
+                  ) : (
+                    <div className="nav-item nav-item-coming-soon">
+                      <span className="nav-icon">{mod.icon}</span>
+                      <span className="nav-label">{mod.title}</span>
+                      <span className="coming-soon-badge">Soon</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ))}
+
+          <div className="nav-divider" />
+
+          {BOTTOM_NAV.map(item => (
             <button
               key={item.key}
               className={`nav-item ${currentPage === item.key ? 'active' : ''}`}
@@ -42,6 +96,7 @@ export default function Layout({ children, currentPage, onNavigate, xp, level, s
             </button>
           ))}
         </nav>
+
         <div className="sidebar-footer">
           <XPBar xp={xp} level={level} />
         </div>
@@ -50,7 +105,7 @@ export default function Layout({ children, currentPage, onNavigate, xp, level, s
       <button className="mobile-menu-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>
         {sidebarOpen ? '✕' : '☰'}
       </button>
-      
+
       <AnimatePresence>
         {sidebarOpen && (
           <motion.div
@@ -79,14 +134,14 @@ export default function Layout({ children, currentPage, onNavigate, xp, level, s
       </main>
 
       <nav className="bottom-nav">
-        {NAV_ITEMS.slice(0, 6).map(item => (
+        {[TOP_NAV[0], ...NAV_SECTIONS.flatMap(s => s.modules.flatMap(m => m.topics.filter(t => t.route).sort((a, b) => (a.order || 0) - (b.order || 0)).slice(0, 2))), BOTTOM_NAV[0]].slice(0, 6).map(item => (
           <button
-            key={item.key}
-            className={`bottom-nav-item ${currentPage === item.key ? 'active' : ''}`}
-            onClick={() => onNavigate(item.key)}
+            key={item.key || item.route}
+            className={`bottom-nav-item ${currentPage === (item.key || item.route) ? 'active' : ''}`}
+            onClick={() => onNavigate(item.key || item.route)}
           >
             <span className="bottom-nav-icon">{item.icon}</span>
-            <span className="bottom-nav-label">{item.label}</span>
+            <span className="bottom-nav-label">{item.label || item.title}</span>
           </button>
         ))}
       </nav>

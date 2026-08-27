@@ -1,4 +1,4 @@
-const STORAGE_PREFIX = 'numberworld_';
+const STORAGE_PREFIX = 'aptify_';
 
 function getKey(key) {
   return STORAGE_PREFIX + key;

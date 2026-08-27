@@ -16,7 +16,7 @@ export default function Settings({ settings, onSettingsChange, onResetProgress }
         animate={{ opacity: 1, y: 0 }}
       >
         <h1>⚙️ Settings</h1>
-        <p>Customize your Number World experience!</p>
+        <p>Customize your APTIFY experience!</p>
       </motion.div>
 
       <div className="settings-list">
