@@ -1,17 +1,30 @@
 import { isPrime, isEven, isOdd, isNaturalNumber, isWholeNumber, isComposite, isPositive, isNegative } from './numberUtils';
 
+function getAllTypes(n) {
+  const types = [];
+  if (isNaturalNumber(n)) types.push('Natural');
+  if (isWholeNumber(n)) types.push('Whole');
+  if (isInteger(n)) types.push('Integer');
+  if (isPositive(n)) types.push('Positive');
+  if (isNegative(n)) types.push('Negative');
+  if (isEven(n)) types.push('Even');
+  if (isOdd(n)) types.push('Odd');
+  if (isPrime(n)) types.push('Prime');
+  if (isComposite(n)) types.push('Composite');
+  return types;
+}
+
+function isInteger(n) {
+  return Number.isInteger(n);
+}
+
+const ALL_TYPE_OPTIONS = ['Natural', 'Whole', 'Integer', 'Positive', 'Negative', 'Even', 'Odd', 'Prime', 'Composite'];
+
 const QUESTIONS = [
-  { type: 'identify', question: 'What type of number is {n}?', options: ['Natural', 'Whole', 'Even', 'Odd', 'Prime', 'Composite'], getCorrect: (n) => {
-    const types = [];
-    if (isNaturalNumber(n)) types.push('Natural');
-    if (isWholeNumber(n)) types.push('Whole');
-    if (isEven(n)) types.push('Even');
-    if (isOdd(n)) types.push('Odd');
-    if (isPrime(n)) types.push('Prime');
-    if (isComposite(n)) types.push('Composite');
-    return types.length > 0 ? types[0] : 'Whole';
-  }},
-  { type: 'find_prime', question: 'Which number is prime?', getCorrect: () => {
+  { type: 'identify', question: 'What types of number is {n}? (Select all that apply)', multi: true,
+    getAllCorrect: (n) => getAllTypes(n),
+  },
+  { type: 'find_prime', question: 'Which number is prime?', multi: false, getCorrect: () => {
     const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31];
     return primes[Math.floor(Math.random() * primes.length)];
   }, getOptions: (correct) => {
@@ -24,7 +37,7 @@ const QUESTIONS = [
     }
     return opts.sort(() => Math.random() - 0.5);
   }},
-  { type: 'find_even', question: 'Which number is even?', getCorrect: () => {
+  { type: 'find_even', question: 'Which number is even?', multi: false, getCorrect: () => {
     return [2, 4, 6, 8, 10, 12, 14, 16, 18, 20][Math.floor(Math.random() * 10)];
   }, getOptions: (correct) => {
     const opts = [correct];
@@ -36,7 +49,7 @@ const QUESTIONS = [
     }
     return opts.sort(() => Math.random() - 0.5);
   }},
-  { type: 'find_odd', question: 'Which number is odd?', getCorrect: () => {
+  { type: 'find_odd', question: 'Which number is odd?', multi: false, getCorrect: () => {
     return [1, 3, 5, 7, 9, 11, 13, 15, 17, 19][Math.floor(Math.random() * 10)];
   }, getOptions: (correct) => {
     const opts = [correct];
@@ -48,7 +61,7 @@ const QUESTIONS = [
     }
     return opts.sort(() => Math.random() - 0.5);
   }},
-  { type: 'find_negative', question: 'Which number is negative?', getCorrect: () => {
+  { type: 'find_negative', question: 'Which number is negative?', multi: false, getCorrect: () => {
     return -(Math.floor(Math.random() * 20) + 1);
   }, getOptions: (correct) => {
     const opts = [correct];
@@ -60,7 +73,7 @@ const QUESTIONS = [
     }
     return opts.sort(() => Math.random() - 0.5);
   }},
-  { type: 'find_composite', question: 'Which number is composite?', getCorrect: () => {
+  { type: 'find_composite', question: 'Which number is composite?', multi: false, getCorrect: () => {
     const composites = [4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20, 21, 22, 24, 25, 26, 27, 28];
     return composites[Math.floor(Math.random() * composites.length)];
   }, getOptions: (correct) => {
@@ -89,20 +102,23 @@ export function generateQuestion(difficulty = 1) {
   const numbers = getDifficultyNumbers(difficulty);
   const n = numbers[Math.floor(Math.random() * numbers.length)];
   
-  let options;
-  let correctAnswer;
-  
   if (template.type === 'identify') {
-    correctAnswer = template.getCorrect(n);
-    const otherOptions = template.options.filter(o => o !== correctAnswer);
-    const shuffled = otherOptions.sort(() => Math.random() - 0.5).slice(0, 3);
-    options = [correctAnswer, ...shuffled].sort(() => Math.random() - 0.5);
-    return { ...template, question: template.question.replace('{n}', n), options, correctAnswer, n };
+    const allCorrect = template.getAllCorrect(n);
+    const wrongOptions = ALL_TYPE_OPTIONS.filter(o => !allCorrect.includes(o));
+    const shuffledWrong = wrongOptions.sort(() => Math.random() - 0.5);
+    const numWrong = Math.min(3, shuffledWrong.length);
+    const options = [...allCorrect, ...shuffledWrong.slice(0, numWrong)].sort(() => Math.random() - 0.5);
+    return {
+      ...template,
+      question: template.question.replace('{n}', n),
+      options,
+      correctAnswers: allCorrect,
+      n,
+    };
   }
   
-  correctAnswer = template.getCorrect();
-  options = template.getOptions(correctAnswer);
-  
+  const correctAnswer = template.getCorrect();
+  const options = template.getOptions(correctAnswer);
   return { ...template, options: options.map(String), correctAnswer: String(correctAnswer) };
 }
 
@@ -121,14 +137,15 @@ export function generateDailyChallenge() {
   const n = numbers[Math.floor(rng(seed + 1) * numbers.length)];
   
   if (qType === 'identify') {
-    const correctAnswer = isPrime(n) ? 'Prime' : isEven(n) ? 'Even' : isOdd(n) ? 'Odd' : 'Whole';
-    const allOptions = ['Natural', 'Whole', 'Even', 'Odd', 'Prime', 'Composite'];
-    const otherOptions = allOptions.filter(o => o !== correctAnswer);
-    const shuffled = otherOptions.sort((a, b) => rng(seed + a.charCodeAt(0)) - 0.5).slice(0, 3);
+    const allCorrect = getAllTypes(n);
+    const wrongOptions = ALL_TYPE_OPTIONS.filter(o => !allCorrect.includes(o));
+    const shuffledWrong = wrongOptions.sort((a, b) => rng(seed + a.charCodeAt(0)) - 0.5);
+    const options = [...allCorrect, ...shuffledWrong.slice(0, 3)].sort(() => rng(seed + n) - 0.5);
     return {
-      question: `What type of number is ${n}?`,
-      options: [correctAnswer, ...shuffled].sort(() => rng(seed + n) - 0.5),
-      correctAnswer,
+      question: `What types of number is ${n}? (Select all that apply)`,
+      multi: true,
+      options,
+      correctAnswers: allCorrect,
       n,
     };
   }
@@ -140,7 +157,7 @@ export function generateDailyChallenge() {
       const c = prime + Math.floor(rng(seed + opts.length) * 10) - 3;
       if (c > 1 && !opts.includes(c) && !isPrime(c)) opts.push(c);
     }
-    return { question: 'Which number is prime?', options: opts.sort(() => rng(seed + 3) - 0.5).map(String), correctAnswer: String(prime) };
+    return { question: 'Which number is prime?', multi: false, options: opts.sort(() => rng(seed + 3) - 0.5).map(String), correctAnswer: String(prime) };
   }
   
   const even = [2, 4, 6, 8, 10, 12, 14, 16][Math.floor(rng(seed + 4) * 8)];
@@ -149,5 +166,5 @@ export function generateDailyChallenge() {
     const c = Math.floor(rng(seed + opts.length + 10) * 20) + 1;
     if (!opts.includes(c) && isOdd(c)) opts.push(c);
   }
-  return { question: 'Which number is even?', options: opts.sort(() => rng(seed + 5) - 0.5).map(String), correctAnswer: String(even) };
+  return { question: 'Which number is even?', multi: false, options: opts.sort(() => rng(seed + 5) - 0.5).map(String), correctAnswer: String(even) };
 }

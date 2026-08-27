@@ -2284,6 +2284,57 @@ body {
   opacity: 0.4;
 }
 
+.quiz-option.selected {
+  border-color: var(--purple);
+  background: #faf5ff;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+}
+
+.quiz-option.missed {
+  border-color: var(--yellow);
+  background: #fffbeb;
+  color: #92400e;
+  opacity: 1;
+}
+
+.quiz-options.multi {
+  grid-template-columns: 1fr;
+}
+
+.quiz-options.multi .quiz-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.checkbox {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.quiz-hint {
+  font-size: 14px;
+  color: var(--purple);
+  font-weight: 700;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.submit-btn {
+  padding: 12px 32px;
+  border: none;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+  margin-top: 8px;
+}
+
 .quiz-result {
   display: flex;
   align-items: center;
