@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 
-export default function Settings({ settings, onSettingsChange, onResetProgress }) {
+export default function Settings({ settings, onSettingsChange, onResetProgress, onLogout }) {
   const [showConfirm, setShowConfirm] = useState(false);
 
   const handleToggle = (key) => {
@@ -70,6 +70,17 @@ export default function Settings({ settings, onSettingsChange, onResetProgress }
             <motion.div className="toggle-knob" animate={{ x: settings.reducedMotion ? 22 : 0 }} />
           </button>
         </div>
+      </div>
+
+      <div className="settings-account">
+        <h3>Account</h3>
+        <motion.button
+          className="logout-btn-settings"
+          onClick={onLogout}
+          whileHover={{ scale: 1.02 }}
+        >
+          🚪 Switch Student
+        </motion.button>
       </div>
 
       <div className="settings-danger">

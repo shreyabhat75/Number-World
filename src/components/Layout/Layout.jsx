@@ -12,11 +12,13 @@ const NAV_ITEMS = [
   { key: 'divisibility', icon: '🔢', label: 'Divisibility Rules' },
   { key: 'factor-tree', icon: '🌳', label: 'Prime Factor Tree' },
   { key: 'quiz', icon: '🎮', label: 'Number Detective' },
+  { key: 'my-progress', icon: '📊', label: 'My Progress' },
+  { key: 'class-progress', icon: '👥', label: 'Class Progress' },
   { key: 'achievements', icon: '🏆', label: 'Achievements' },
   { key: 'settings', icon: '⚙️', label: 'Settings' },
 ];
 
-export default function Layout({ children, currentPage, onNavigate, xp, level, settings }) {
+export default function Layout({ children, currentPage, onNavigate, xp, level, settings, student, onLogout }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const prefersReduced = settings?.reducedMotion || false;
 
@@ -27,6 +29,18 @@ export default function Layout({ children, currentPage, onNavigate, xp, level, s
           <span className="sidebar-logo">🌈</span>
           <span className="sidebar-title">Number World</span>
         </div>
+
+        {student && (
+          <div className="sidebar-student">
+            <span className="student-avatar">{student.avatar}</span>
+            <div className="student-info">
+              <span className="student-name">{student.name}</span>
+              <span className="student-level">Level {student.level || 1}</span>
+            </div>
+            <button className="logout-btn" onClick={onLogout} title="Switch student">🚪</button>
+          </div>
+        )}
+
         <nav className="sidebar-nav">
           {NAV_ITEMS.map(item => (
             <button

@@ -1,5 +1,6 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import Layout from './components/Layout/Layout';
+import StudentLogin from './pages/StudentLogin';
 import Home from './pages/Home';
 import NumberExplorer from './pages/NumberExplorer';
 import NaturalNumbers from './pages/NaturalNumbers';
@@ -11,103 +12,110 @@ import DivisibilityRules from './pages/DivisibilityRules';
 import QuizPage from './pages/QuizPage';
 import Achievements from './pages/Achievements';
 import Settings from './pages/Settings';
+import MyProgress from './pages/MyProgress';
+import ClassProgress from './pages/ClassProgress';
 import Confetti from './components/Confetti/Confetti';
-import { getProgress, saveState, addXP, clearAllState } from './utils/storage';
-import { checkAchievements, ACHIEVEMENTS } from './data/achievements';
-import { isPrime, isEven, isOdd } from './utils/numberUtils';
+import { StudentProvider, useStudent } from './context/StudentContext';
+import { ACHIEVEMENTS } from './data/achievements';
 
-export default function App() {
-  const [progress, setProgress] = useState(() => getProgress());
+function AppInner() {
+  const {
+    currentStudent, loading, error, isOnline,
+    studentAchievements, quizProgress, divProgress, treeProgress, topicProgressList,
+    addXP, updateStreak, recordQuizResult, updateTopicProgress,
+    completeDivRule, completeTree, unlockAchievement, checkAndUnlockAchievements,
+    recordAct, resetProgress, deleteStudent, logout,
+  } = useStudent();
+
   const [currentPage, setCurrentPage] = useState('home');
   const [confettiActive, setConfettiActive] = useState(false);
   const [newAchievements, setNewAchievements] = useState([]);
 
-  const persistProgress = useCallback((updates) => {
-    setProgress(prev => {
-      const next = { ...prev, ...updates };
-      Object.entries(updates).forEach(([key, value]) => {
-        saveState(key, value);
-      });
-      return next;
-    });
-  }, []);
+  const handleNavigate = useCallback((page) => setCurrentPage(page), []);
 
-  const handleNavigate = useCallback((page) => {
-    setCurrentPage(page);
-  }, []);
-
-  const handleExplore = useCallback((n) => {
-    const explored = progress.numbersExplored || [];
-    if (!explored.includes(n)) {
-      const newExplored = [...explored, n];
-      const newXP = addXP(5);
-      persistProgress({
-        numbersExplored: newExplored,
-        xp: newXP.xp,
-        level: newXP.level,
-      });
-      const { newlyUnlocked } = checkAchievements({ ...progress, numbersExplored: newExplored, xp: newXP.xp, level: newXP.level });
-      if (newlyUnlocked.length > 0) {
-        setNewAchievements(prev => [...prev, ...newlyUnlocked]);
-        setConfettiActive(true);
-        const achievementXP = newlyUnlocked.reduce((sum, a) => sum + a.xp, 0);
-        const finalXP = addXP(achievementXP);
-        persistProgress({ xp: finalXP.xp, level: finalXP.level, achievements: [...(progress.achievements || []), ...newlyUnlocked.map(a => a.id)] });
-      }
+  const handleExplore = useCallback(async (n) => {
+    if (!currentStudent) return;
+    if (isOnline) {
+      await updateTopicProgress('explorer', true, 1, 5);
     }
-  }, [progress, persistProgress]);
-
-  const handleQuizCorrect = useCallback(() => {
-    const newXP = addXP(10);
-    const newStreak = (progress.bestStreak || 0) + 1;
-    const newTotalCorrect = (progress.totalCorrect || 0) + 1;
-    const newTotalAnswered = (progress.totalAnswered || 0) + 1;
-    persistProgress({
-      xp: newXP.xp,
-      level: newXP.level,
-      bestStreak: Math.max(progress.bestStreak || 0, newStreak),
-      totalCorrect: newTotalCorrect,
-      totalAnswered: newTotalAnswered,
+    await addXP(5);
+    const achievementXP = 0;
+    const newlyUnlocked = await checkAndUnlockAchievements({
+      numbersExplored: [n],
     });
-    setConfettiActive(true);
-    const { newlyUnlocked } = checkAchievements({ ...progress, bestStreak: newStreak, totalCorrect: newTotalCorrect, totalAnswered: newTotalAnswered, xp: newXP.xp, level: newXP.level });
     if (newlyUnlocked.length > 0) {
       setNewAchievements(prev => [...prev, ...newlyUnlocked]);
-      const achievementXP = newlyUnlocked.reduce((sum, a) => sum + a.xp, 0);
-      const finalXP = addXP(achievementXP);
-      persistProgress({ xp: finalXP.xp, level: finalXP.level, achievements: [...(progress.achievements || []), ...newlyUnlocked.map(a => a.id)] });
+      setConfettiActive(true);
+      for (const a of newlyUnlocked) await addXP(a.xp);
     }
-  }, [progress, persistProgress]);
+  }, [currentStudent, isOnline, addXP, updateTopicProgress, checkAndUnlockAchievements]);
 
-  const handleQuizWrong = useCallback(() => {
-    persistProgress({
-      totalAnswered: (progress.totalAnswered || 0) + 1,
-    });
-  }, [progress, persistProgress]);
-
-  const handleDailyComplete = useCallback(() => {
-    const newXP = addXP(25);
-    persistProgress({
-      xp: newXP.xp,
-      level: newXP.level,
-      dailyChallenges: (progress.dailyChallenges || 0) + 1,
-    });
+  const handleQuizCorrect = useCallback(async () => {
+    if (!currentStudent) return;
+    await addXP(10);
+    await updateStreak(true);
+    await recordQuizResult(true);
     setConfettiActive(true);
-  }, [progress, persistProgress]);
+    const newlyUnlocked = await checkAndUnlockAchievements({
+      bestStreak: (currentStudent.best_streak || 0) + 1,
+      totalCorrect: (quizProgress?.correct_answers || 0) + 1,
+      totalAnswered: (quizProgress?.questions_attempted || 0) + 1,
+    });
+    if (newlyUnlocked.length > 0) {
+      setNewAchievements(prev => [...prev, ...newlyUnlocked]);
+      for (const a of newlyUnlocked) await addXP(a.xp);
+    }
+  }, [currentStudent, addXP, updateStreak, recordQuizResult, checkAndUnlockAchievements, quizProgress]);
 
-  const handleSettingsChange = useCallback((newSettings) => {
-    persistProgress({ settings: newSettings });
-  }, [persistProgress]);
+  const handleQuizWrong = useCallback(async () => {
+    if (!currentStudent) return;
+    await updateStreak(false);
+    await recordQuizResult(false);
+  }, [currentStudent, updateStreak, recordQuizResult]);
 
-  const handleResetProgress = useCallback(() => {
-    clearAllState();
-    setProgress(getProgress());
-  }, []);
+  const handleDailyComplete = useCallback(async () => {
+    if (!currentStudent) return;
+    await addXP(25);
+    setConfettiActive(true);
+    if (isOnline) {
+      await recordAct('quiz', 'daily-challenge', 100, 25, { date: new Date().toISOString() });
+    }
+  }, [currentStudent, addXP, isOnline, recordAct]);
+
+  const handleSettingsChange = useCallback(async (newSettings) => {
+    if (isOnline && currentStudent) {
+      await recordAct('settings', 'change', 100, 0, newSettings);
+    }
+  }, [isOnline, currentStudent, recordAct]);
+
+  const handleResetProgress = useCallback(async () => {
+    await resetProgress();
+  }, [resetProgress]);
+
+  const handleLogout = useCallback(() => {
+    logout();
+    setCurrentPage('home');
+  }, [logout]);
+
+  if (loading) {
+    return (
+      <div className="app-loading">
+        <div className="loading-spinner" />
+        <p>Loading Number World...</p>
+      </div>
+    );
+  }
+
+  if (!currentStudent) {
+    return <StudentLogin />;
+  }
+
+  const settings = { soundEffects: true, animations: true, reducedMotion: false };
 
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
-        return <Home onNavigate={handleNavigate} xp={progress.xp} level={progress.level} onDailyComplete={handleDailyComplete} dailyCompleted={false} />;
+        return <Home onNavigate={handleNavigate} xp={currentStudent.xp} level={currentStudent.level} onDailyComplete={handleDailyComplete} dailyCompleted={false} />;
       case 'explorer':
         return <NumberExplorer onExplore={handleExplore} />;
       case 'natural':
@@ -125,11 +133,15 @@ export default function App() {
       case 'quiz':
         return <QuizPage onCorrect={handleQuizCorrect} onWrong={handleQuizWrong} />;
       case 'achievements':
-        return <Achievements unlockedAchievements={progress.achievements || []} />;
+        return <Achievements unlockedAchievements={studentAchievements} />;
+      case 'my-progress':
+        return <MyProgress />;
+      case 'class-progress':
+        return <ClassProgress />;
       case 'settings':
-        return <Settings settings={progress.settings || { soundEffects: true, animations: true, reducedMotion: false }} onSettingsChange={handleSettingsChange} onResetProgress={handleResetProgress} />;
+        return <Settings settings={settings} onSettingsChange={handleSettingsChange} onResetProgress={handleResetProgress} onLogout={handleLogout} />;
       default:
-        return <Home onNavigate={handleNavigate} xp={progress.xp} level={progress.level} onDailyComplete={handleDailyComplete} dailyCompleted={false} />;
+        return <Home onNavigate={handleNavigate} xp={currentStudent.xp} level={currentStudent.level} onDailyComplete={handleDailyComplete} dailyCompleted={false} />;
     }
   };
 
@@ -138,9 +150,11 @@ export default function App() {
       <Layout
         currentPage={currentPage}
         onNavigate={handleNavigate}
-        xp={progress.xp}
-        level={progress.level}
-        settings={progress.settings}
+        xp={currentStudent.xp}
+        level={currentStudent.level}
+        settings={settings}
+        student={currentStudent}
+        onLogout={handleLogout}
       >
         {renderPage()}
       </Layout>
@@ -160,5 +174,13 @@ export default function App() {
         </div>
       )}
     </>
+  );
+}
+
+export default function App() {
+  return (
+    <StudentProvider>
+      <AppInner />
+    </StudentProvider>
   );
 }

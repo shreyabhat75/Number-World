@@ -3681,3 +3681,646 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* ============================================================
+   STUDENT LOGIN PAGE
+   ============================================================ */
+.student-login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  overflow: hidden;
+}
+
+.login-background {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.floating-number {
+  position: absolute;
+  font-size: 48px;
+  font-weight: 900;
+  color: rgba(255,255,255,0.08);
+  user-select: none;
+}
+
+.login-card {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-xl);
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  z-index: 1;
+}
+
+.login-logo {
+  font-size: 56px;
+  margin-bottom: 8px;
+}
+
+.login-title {
+  font-size: 28px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 4px;
+}
+
+.login-subtitle {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.login-mascot-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.login-mascot {
+  font-size: 28px;
+}
+
+.login-greeting {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.login-input {
+  width: 100%;
+  padding: 14px 18px;
+  border: 2px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.login-input:focus {
+  border-color: var(--purple);
+}
+
+.login-btn {
+  padding: 14px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.login-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.login-error {
+  color: var(--red);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.login-offline {
+  color: var(--yellow);
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.login-existing {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.existing-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.existing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.existing-student-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+  background: white;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+
+.existing-student-btn:hover {
+  border-color: var(--purple);
+  background: #f8fafc;
+}
+
+.existing-avatar {
+  font-size: 20px;
+}
+
+.existing-name {
+  font-size: 13px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.existing-xp {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* ============================================================
+   APP LOADING STATE
+   ============================================================ */
+.app-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 16px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e2e8f0;
+  border-top-color: var(--purple);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   SIDEBAR STUDENT INFO
+   ============================================================ */
+.sidebar-student {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  margin: 0 12px;
+  background: linear-gradient(135deg, #f0f4ff, #faf5ff);
+  border-radius: var(--radius-md);
+}
+
+.sidebar-student .student-avatar {
+  font-size: 24px;
+}
+
+.sidebar-student .student-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-student .student-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.sidebar-student .student-level {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.sidebar-student .logout-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.sidebar-student .logout-btn:hover {
+  opacity: 1;
+}
+
+/* ============================================================
+   MY PROGRESS PAGE
+   ============================================================ */
+.progress-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.progress-profile {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.progress-profile .profile-avatar {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.progress-profile h2 {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.progress-profile .profile-level {
+  color: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.progress-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 16px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-icon {
+  font-size: 24px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 800;
+  display: block;
+  color: var(--text-primary);
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-bar {
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 3px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--purple), var(--blue));
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.progress-section {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.progress-section h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.div-progress-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.div-rule-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  background: #f1f5f9;
+  color: var(--text-secondary);
+}
+
+.div-rule-badge.mastered {
+  background: linear-gradient(135deg, var(--green), #059669);
+  color: white;
+}
+
+.progress-detail {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.mastered-numbers {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #f8fafc;
+  border-radius: var(--radius-sm);
+}
+
+.quiz-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.quiz-stat {
+  text-align: center;
+}
+
+.quiz-stat span {
+  font-size: 20px;
+  font-weight: 800;
+  display: block;
+}
+
+.quiz-stat label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.achievements-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+}
+
+.achievement-mini {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: #f1f5f9;
+  font-size: 13px;
+  opacity: 0.5;
+}
+
+.achievement-mini.unlocked {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  opacity: 1;
+}
+
+.ach-mini-title {
+  font-weight: 600;
+  font-size: 12px;
+}
+
+/* ============================================================
+   CLASS PROGRESS PAGE
+   ============================================================ */
+.class-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.class-stat {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 20px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.class-stat-icon {
+  font-size: 28px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.class-stat-val {
+  font-size: 24px;
+  font-weight: 800;
+  display: block;
+}
+
+.class-stat-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.sort-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.sort-btn {
+  padding: 6px 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: 20px;
+  background: white;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.sort-btn.active {
+  border-color: var(--purple);
+  background: var(--purple);
+  color: white;
+}
+
+.class-student-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.class-student-card {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.class-student-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.class-student-card.expanded {
+  box-shadow: var(--shadow-md);
+  border: 2px solid var(--purple);
+}
+
+.student-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.student-row .student-avatar {
+  font-size: 22px;
+}
+
+.student-row .student-name {
+  font-weight: 700;
+  flex: 1;
+}
+
+.student-row .student-level {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--blue);
+}
+
+.student-row .student-xp {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--yellow);
+}
+
+.student-row .student-title {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.student-detail {
+  padding-top: 12px;
+  margin-top: 12px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.student-detail p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.offline-notice {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text-secondary);
+}
+
+.offline-notice .small {
+  font-size: 13px;
+  margin-top: 8px;
+  opacity: 0.7;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px;
+  color: var(--text-secondary);
+}
+
+.loading-state {
+  text-align: center;
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.loading-state span {
+  font-size: 32px;
+}
+
+/* ============================================================
+   SETTINGS ACCOUNT SECTION
+   ============================================================ */
+.settings-account {
+  margin: 24px 0;
+}
+
+.settings-account h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.logout-btn-settings {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  background: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.logout-btn-settings:hover {
+  border-color: var(--purple);
+  background: #f8fafc;
+}
+
+@media (max-width: 768px) {
+  .progress-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .class-stats-row {
+    grid-template-columns: 1fr;
+  }
+  .quiz-stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .existing-grid {
+    grid-template-columns: 1fr;
+  }
+}
