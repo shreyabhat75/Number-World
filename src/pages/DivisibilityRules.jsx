@@ -8,6 +8,7 @@ import DivisibilityMatrix from '../components/Divisibility/DivisibilityMatrix';
 import RemainderVisualizer from '../components/Divisibility/RemainderVisualizer';
 import DivisibilityChallenge from '../components/Divisibility/DivisibilityChallenge';
 import Mascot from '../components/Mascot/Mascot';
+import DownloadButtons from '../components/DownloadButtons/DownloadButtons';
 
 const QUICK_NUMBERS = [12, 24, 50, 72, 100, 120, 360, 1000];
 const MATRIX_NUMBERS = [12, 24, 35, 72, 100, 360];
@@ -140,6 +141,8 @@ export default function DivisibilityRules({ onExplore }) {
           ))}
         </div>
       </section>
+
+      <DownloadButtons topicSlug="divisibility-rules" topicLabel="Divisibility Rules" />
     </div>
   );
 }

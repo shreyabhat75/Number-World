@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import PrimeVisualizer from '../components/PrimeVisualizer/PrimeVisualizer';
+import DownloadButtons from '../components/DownloadButtons/DownloadButtons';
 
 const PRIMES_UNDER_50 = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47];
 
@@ -93,6 +94,8 @@ export default function PrimeNumbers() {
           </div>
         </div>
       </div>
+
+      <DownloadButtons topicSlug="prime-numbers" topicLabel="Prime Numbers" />
     </div>
   );
 }

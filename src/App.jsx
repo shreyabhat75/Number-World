@@ -8,6 +8,7 @@ import EvenOdd from './pages/EvenOdd';
 import Integers from './pages/Integers';
 import PrimeNumbers from './pages/PrimeNumbers';
 import PrimeFactorTreePage from './pages/PrimeFactorTreePage';
+import FractionsDecimals from './pages/FractionsDecimals';
 import DivisibilityRules from './pages/DivisibilityRules';
 import QuizPage from './pages/QuizPage';
 import Achievements from './pages/Achievements';
@@ -17,6 +18,19 @@ import ClassProgress from './pages/ClassProgress';
 import Confetti from './components/Confetti/Confetti';
 import { StudentProvider, useStudent } from './context/StudentContext';
 import { ACHIEVEMENTS } from './data/achievements';
+import { playCorrectSound, playWrongSound, playAchievementSound } from './utils/sound';
+
+const SETTINGS_KEY = 'numberWorldSettings';
+const DEFAULT_SETTINGS = { soundEffects: true, animations: true, reducedMotion: false };
+
+function loadSettings() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY));
+    return saved ? { ...DEFAULT_SETTINGS, ...saved } : DEFAULT_SETTINGS;
+  } catch {
+    return DEFAULT_SETTINGS;
+  }
+}
 
 function AppInner() {
   const {
@@ -30,6 +44,8 @@ function AppInner() {
   const [currentPage, setCurrentPage] = useState('home');
   const [confettiActive, setConfettiActive] = useState(false);
   const [newAchievements, setNewAchievements] = useState([]);
+  const [fractionsBuilt, setFractionsBuilt] = useState(0);
+  const [settings, setSettings] = useState(loadSettings);
 
   const handleNavigate = useCallback((page) => setCurrentPage(page), []);
 
@@ -50,8 +66,24 @@ function AppInner() {
     }
   }, [currentStudent, isOnline, addXP, updateTopicProgress, checkAndUnlockAchievements]);
 
+  const handleFractionBuild = useCallback(async () => {
+    if (!currentStudent) return;
+    const newCount = fractionsBuilt + 1;
+    setFractionsBuilt(newCount);
+    if (newCount % 5 === 0) {
+      await addXP(3);
+      const newlyUnlocked = await checkAndUnlockAchievements({ fractionsBuilt: newCount });
+      if (newlyUnlocked.length > 0) {
+        setNewAchievements(prev => [...prev, ...newlyUnlocked]);
+        setConfettiActive(true);
+        for (const a of newlyUnlocked) await addXP(a.xp);
+      }
+    }
+  }, [currentStudent, fractionsBuilt, addXP, checkAndUnlockAchievements]);
+
   const handleQuizCorrect = useCallback(async () => {
     if (!currentStudent) return;
+    if (settings.soundEffects) playCorrectSound();
     await addXP(10);
     await updateStreak(true);
     await recordQuizResult(true);
@@ -62,16 +94,18 @@ function AppInner() {
       totalAnswered: (quizProgress?.questions_attempted || 0) + 1,
     });
     if (newlyUnlocked.length > 0) {
+      if (settings.soundEffects) playAchievementSound();
       setNewAchievements(prev => [...prev, ...newlyUnlocked]);
       for (const a of newlyUnlocked) await addXP(a.xp);
     }
-  }, [currentStudent, addXP, updateStreak, recordQuizResult, checkAndUnlockAchievements, quizProgress]);
+  }, [currentStudent, addXP, updateStreak, recordQuizResult, checkAndUnlockAchievements, quizProgress, settings.soundEffects]);
 
   const handleQuizWrong = useCallback(async () => {
     if (!currentStudent) return;
+    if (settings.soundEffects) playWrongSound();
     await updateStreak(false);
     await recordQuizResult(false);
-  }, [currentStudent, updateStreak, recordQuizResult]);
+  }, [currentStudent, updateStreak, recordQuizResult, settings.soundEffects]);
 
   const handleDailyComplete = useCallback(async () => {
     if (!currentStudent) return;
@@ -83,6 +117,8 @@ function AppInner() {
   }, [currentStudent, addXP, isOnline, recordAct]);
 
   const handleSettingsChange = useCallback(async (newSettings) => {
+    setSettings(newSettings);
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(newSettings));
     if (isOnline && currentStudent) {
       await recordAct('settings', 'change', 100, 0, newSettings);
     }
@@ -110,8 +146,6 @@ function AppInner() {
     return <StudentLogin />;
   }
 
-  const settings = { soundEffects: true, animations: true, reducedMotion: false };
-
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
@@ -126,6 +160,8 @@ function AppInner() {
         return <Integers />;
       case 'primes':
         return <PrimeNumbers />;
+      case 'fractions':
+        return <FractionsDecimals onBuild={handleFractionBuild} />;
       case 'divisibility':
         return <DivisibilityRules onExplore={handleExplore} />;
       case 'factor-tree':

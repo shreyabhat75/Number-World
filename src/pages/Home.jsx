@@ -8,6 +8,7 @@ const TOPIC_CARDS = [
   { key: 'even-odd', icon: '🍎', title: 'Even & Odd', desc: 'Can you pair them all?', color: '#60a5fa', gradient: 'linear-gradient(135deg, #60a5fa, #3b82f6)' },
   { key: 'integers', icon: '➕➖', title: 'Integers', desc: 'Explore both sides of zero!', color: '#a78bfa', gradient: 'linear-gradient(135deg, #a78bfa, #8b5cf6)' },
   { key: 'primes', icon: '⭐', title: 'Prime Numbers', desc: 'Meet the special numbers!', color: '#fbbf24', gradient: 'linear-gradient(135deg, #fbbf24, #f59e0b)' },
+  { key: 'fractions', icon: '🍕', title: 'Fractions & Decimals', desc: 'Slice, convert, compare!', color: '#fb7185', gradient: 'linear-gradient(135deg, #fb7185, #e11d48)' },
   { key: 'factor-tree', icon: '🌳', title: 'Prime Factor Tree', desc: 'Grow numbers into primes!', color: '#34d399', gradient: 'linear-gradient(135deg, #34d399, #10b981)' },
   { key: 'quiz', icon: '🎮', title: 'Quiz Time', desc: 'Test your number skills!', color: '#f472b6', gradient: 'linear-gradient(135deg, #f472b6, #ec4899)' },
 ];

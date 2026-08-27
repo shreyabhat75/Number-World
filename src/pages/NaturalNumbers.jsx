@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import DownloadButtons from '../components/DownloadButtons/DownloadButtons';
 
 export default function NaturalNumbers() {
   const [mode, setMode] = useState('natural');
@@ -105,6 +106,8 @@ export default function NaturalNumbers() {
           <p className="small">Natural numbers plus zero.</p>
         </div>
       </div>
+
+      <DownloadButtons topicSlug="natural-numbers" topicLabel="Natural & Whole Numbers" />
     </div>
   );
 }

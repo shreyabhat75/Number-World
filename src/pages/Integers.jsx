@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import NumberLine from '../components/NumberLine/NumberLine';
+import DownloadButtons from '../components/DownloadButtons/DownloadButtons';
 
 export default function Integers() {
   const [number, setNumber] = useState(0);
@@ -121,6 +122,8 @@ export default function Integers() {
           <p><strong>Zero</strong> is in the middle — neither positive nor negative!</p>
         </div>
       </div>
+
+      <DownloadButtons topicSlug="integers" topicLabel="Integers" />
     </div>
   );
 }

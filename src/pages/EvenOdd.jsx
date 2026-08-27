@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import EvenOddVisualizer from '../components/EvenOddVisualizer/EvenOddVisualizer';
+import DownloadButtons from '../components/DownloadButtons/DownloadButtons';
 
 export default function EvenOdd() {
   const [number, setNumber] = useState(7);
@@ -98,6 +99,8 @@ export default function EvenOdd() {
           </div>
         </motion.div>
       </div>
+
+      <DownloadButtons topicSlug="even-odd" topicLabel="Even & Odd Numbers" />
     </div>
   );
 }

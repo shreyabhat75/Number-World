@@ -1,4 +1,5 @@
 import { isPrime, isEven, isOdd, isNaturalNumber, isWholeNumber, isComposite, isPositive, isNegative } from './numberUtils';
+import { simplifyFraction, fractionToDecimal, gcd } from './fractionUtils';
 
 function getAllTypes(n) {
   const types = [];
@@ -86,6 +87,36 @@ const QUESTIONS = [
     }
     return opts.sort(() => Math.random() - 0.5);
   }},
+  { type: 'simplify_fraction', question: 'What is {n} in simplest form?', multi: false, getFraction: () => {
+    const pairs = [[2, 4], [3, 6], [4, 8], [6, 9], [4, 10], [6, 12], [8, 12], [9, 12], [10, 15], [6, 8]];
+    return pairs[Math.floor(Math.random() * pairs.length)];
+  }, getFractionOptions: ([num, den]) => {
+    const correct = simplifyFraction(num, den);
+    const correctStr = `${correct.num}/${correct.den}`;
+    const opts = [correctStr];
+    while (opts.length < 4) {
+      const dNum = correct.num + Math.floor(Math.random() * 3) - 1;
+      const dDen = correct.den + Math.floor(Math.random() * 3) - 1;
+      if (dNum > 0 && dDen > 0 && gcd(dNum, dDen) === 1) {
+        const candidate = `${dNum}/${dDen}`;
+        if (!opts.includes(candidate)) opts.push(candidate);
+      }
+    }
+    return opts.sort(() => Math.random() - 0.5);
+  }},
+  { type: 'fraction_decimal', question: 'What is {n} as a decimal?', multi: false, getFraction: () => {
+    const pairs = [[1, 2], [1, 4], [3, 4], [1, 5], [2, 5], [1, 10], [3, 10], [3, 5], [1, 8], [7, 10]];
+    return pairs[Math.floor(Math.random() * pairs.length)];
+  }, getFractionOptions: ([num, den]) => {
+    const correct = fractionToDecimal(num, den).toString();
+    const opts = [correct];
+    while (opts.length < 4) {
+      const delta = (Math.floor(Math.random() * 5) + 1) * 0.05 * (Math.random() > 0.5 ? 1 : -1);
+      const candidate = Math.round((fractionToDecimal(num, den) + delta) * 100) / 100;
+      if (candidate > 0 && candidate < 1 && !opts.includes(candidate.toString())) opts.push(candidate.toString());
+    }
+    return opts.sort(() => Math.random() - 0.5);
+  }},
 ];
 
 function getDifficultyNumbers(difficulty) {
@@ -101,7 +132,23 @@ export function generateQuestion(difficulty = 1) {
   const template = QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)];
   const numbers = getDifficultyNumbers(difficulty);
   const n = numbers[Math.floor(Math.random() * numbers.length)];
-  
+
+  if (template.type === 'simplify_fraction' || template.type === 'fraction_decimal') {
+    const [fNum, fDen] = template.getFraction();
+    const fractionLabel = `${fNum}/${fDen}`;
+    const options = template.getFractionOptions([fNum, fDen]);
+    const correctAnswer = template.type === 'simplify_fraction'
+      ? (() => { const s = simplifyFraction(fNum, fDen); return `${s.num}/${s.den}`; })()
+      : fractionToDecimal(fNum, fDen).toString();
+    return {
+      ...template,
+      question: template.question.replace('{n}', fractionLabel),
+      options,
+      correctAnswer,
+      n: fractionLabel,
+    };
+  }
+
   if (template.type === 'identify') {
     const allCorrect = template.getAllCorrect(n);
     const wrongOptions = ALL_TYPE_OPTIONS.filter(o => !allCorrect.includes(o));

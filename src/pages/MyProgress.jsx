@@ -5,9 +5,10 @@ import { getLevelTitle, getXPToNextLevel } from '../utils/storage';
 import { ACHIEVEMENTS } from '../data/achievements';
 import { getAllStudents } from '../services/studentService';
 import { isSupabaseConfigured } from '../lib/supabase';
+import StreakCalendar from '../components/StreakCalendar/StreakCalendar';
 
 export default function MyProgress() {
-  const { currentStudent, quizProgress, divProgress, treeProgress, topicProgressList, studentAchievements } = useStudent();
+  const { currentStudent, quizProgress, divProgress, treeProgress, topicProgressList, studentAchievements, isOnline } = useStudent();
 
   if (!currentStudent) return null;
 
@@ -70,6 +71,13 @@ export default function MyProgress() {
           <span className="stat-label">Achievements</span>
         </div>
       </div>
+
+      <StreakCalendar
+        studentId={currentStudent.id}
+        isOnline={isOnline}
+        currentStreak={currentStudent.streak || 0}
+        bestStreak={currentStudent.best_streak || 0}
+      />
 
       <section className="progress-section">
         <h3>📐 Divisibility Rules</h3>

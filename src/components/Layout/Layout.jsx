@@ -2,21 +2,34 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import XPBar from '../XPBar/XPBar';
 
-const NAV_ITEMS = [
-  { key: 'home', icon: '🏠', label: 'Home' },
-  { key: 'explorer', icon: '🔍', label: 'Number Explorer' },
-  { key: 'natural', icon: '🌱', label: 'Natural & Whole' },
-  { key: 'even-odd', icon: '🍎', label: 'Even & Odd' },
-  { key: 'integers', icon: '➕➖', label: 'Integers' },
-  { key: 'primes', icon: '⭐', label: 'Prime Numbers' },
-  { key: 'divisibility', icon: '🔢', label: 'Divisibility Rules' },
-  { key: 'factor-tree', icon: '🌳', label: 'Prime Factor Tree' },
-  { key: 'quiz', icon: '🎮', label: 'Number Detective' },
-  { key: 'my-progress', icon: '📊', label: 'My Progress' },
-  { key: 'class-progress', icon: '👥', label: 'Class Progress' },
-  { key: 'achievements', icon: '🏆', label: 'Achievements' },
-  { key: 'settings', icon: '⚙️', label: 'Settings' },
+const NAV_SECTIONS = [
+  { title: null, items: [
+    { key: 'home', icon: '🏠', label: 'Home' },
+  ] },
+  { title: 'Numbers', items: [
+    { key: 'explorer', icon: '🔍', label: 'Number Explorer' },
+    { key: 'natural', icon: '🌱', label: 'Natural & Whole' },
+    { key: 'even-odd', icon: '🍎', label: 'Even & Odd' },
+    { key: 'integers', icon: '➕➖', label: 'Integers' },
+    { key: 'primes', icon: '⭐', label: 'Prime Numbers' },
+    { key: 'fractions', icon: '🍕', label: 'Fractions & Decimals' },
+    { key: 'divisibility', icon: '🔢', label: 'Divisibility Rules' },
+    { key: 'factor-tree', icon: '🌳', label: 'Prime Factor Tree' },
+  ] },
+  { title: 'Practice', items: [
+    { key: 'quiz', icon: '🎮', label: 'Number Detective' },
+  ] },
+  { title: 'Progress', items: [
+    { key: 'my-progress', icon: '📊', label: 'My Progress' },
+    { key: 'class-progress', icon: '👥', label: 'Class Progress' },
+    { key: 'achievements', icon: '🏆', label: 'Achievements' },
+  ] },
+  { title: null, items: [
+    { key: 'settings', icon: '⚙️', label: 'Settings' },
+  ] },
 ];
+
+const NAV_ITEMS = NAV_SECTIONS.flatMap(section => section.items);
 
 export default function Layout({ children, currentPage, onNavigate, xp, level, settings, student, onLogout }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -42,18 +55,23 @@ export default function Layout({ children, currentPage, onNavigate, xp, level, s
         )}
 
         <nav className="sidebar-nav">
-          {NAV_ITEMS.map(item => (
-            <button
-              key={item.key}
-              className={`nav-item ${currentPage === item.key ? 'active' : ''}`}
-              onClick={() => { onNavigate(item.key); setSidebarOpen(false); }}
-            >
-              <span className="nav-icon">{item.icon}</span>
-              <span className="nav-label">{item.label}</span>
-              {currentPage === item.key && (
-                <motion.div className="nav-indicator" layoutId="navIndicator" />
-              )}
-            </button>
+          {NAV_SECTIONS.map((section, si) => (
+            <div className="nav-section" key={section.title || `section-${si}`}>
+              {section.title && <div className="nav-section-title">{section.title}</div>}
+              {section.items.map(item => (
+                <button
+                  key={item.key}
+                  className={`nav-item ${currentPage === item.key ? 'active' : ''}`}
+                  onClick={() => { onNavigate(item.key); setSidebarOpen(false); }}
+                >
+                  <span className="nav-icon">{item.icon}</span>
+                  <span className="nav-label">{item.label}</span>
+                  {currentPage === item.key && (
+                    <motion.div className="nav-indicator" layoutId="navIndicator" />
+                  )}
+                </button>
+              ))}
+            </div>
           ))}
         </nav>
         <div className="sidebar-footer">

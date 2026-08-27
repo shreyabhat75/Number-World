@@ -72,3 +72,20 @@ export async function recordActivity(studentId, activityType, activityId, score,
   if (error) console.error('recordActivity:', error);
   return data;
 }
+
+export async function getRecentActivityDates(studentId, days = 30) {
+  if (!isSupabaseConfigured()) return [];
+  const since = new Date();
+  since.setDate(since.getDate() - days);
+  const { data, error } = await supabase
+    .from('student_activities')
+    .select('created_at')
+    .eq('student_id', studentId)
+    .gte('created_at', since.toISOString());
+  if (error) {
+    console.error('getRecentActivityDates:', error);
+    return [];
+  }
+  const days_set = new Set((data || []).map(row => row.created_at.slice(0, 10)));
+  return Array.from(days_set);
+}

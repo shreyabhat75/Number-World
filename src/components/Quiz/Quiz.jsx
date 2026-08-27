@@ -30,6 +30,12 @@ function getExplanation(question, selectedArr, isCorrect) {
   if (question.type === 'find_negative') {
     return `Negative numbers are less than 0. ${question.correctAnswer} is below zero on the number line.`;
   }
+  if (question.type === 'simplify_fraction') {
+    return `Divide the top and bottom by their greatest common factor to get ${question.correctAnswer}.`;
+  }
+  if (question.type === 'fraction_decimal') {
+    return `Divide the numerator by the denominator: ${n} = ${question.correctAnswer}.`;
+  }
   return '';
 }
 

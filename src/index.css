@@ -103,6 +103,19 @@ body {
   overflow-y: auto;
 }
 
+.nav-section {
+  margin-bottom: 4px;
+}
+
+.nav-section-title {
+  padding: 14px 16px 4px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+}
+
 .nav-item {
   position: relative;
   display: flex;
@@ -4323,4 +4336,353 @@ body {
   .existing-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* ===== Fractions & Decimals ===== */
+.fraction-builder-section,
+.fraction-equivalents-section,
+.fraction-compare-section {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 20px;
+}
+
+.fraction-controls {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.fraction-input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.fraction-input-group label {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.fraction-divider-line {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--text-secondary);
+  align-self: center;
+  margin-bottom: 12px;
+}
+
+.fraction-shape-toggle {
+  display: flex;
+  gap: 8px;
+}
+
+.fraction-shape-toggle button {
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  border: 2px solid #e5e7eb;
+  background: white;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.fraction-shape-toggle button.active {
+  border-color: var(--pink);
+  background: #fdf2f8;
+  color: var(--pink);
+}
+
+.fraction-display-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.fraction-bar {
+  display: flex;
+  width: 220px;
+  height: 70px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.fraction-bar-segment {
+  flex: 1;
+  border-right: 2px solid white;
+  transform-origin: bottom;
+}
+
+.fraction-bar-segment:last-child {
+  border-right: none;
+}
+
+.fraction-readout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.fraction-big {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 40px;
+  font-weight: 900;
+  color: var(--pink);
+  line-height: 1.1;
+}
+
+.fraction-line {
+  width: 44px;
+  height: 4px;
+  background: var(--pink);
+  border-radius: 2px;
+  margin: 2px 0;
+}
+
+.fraction-type-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: #fdf2f8;
+  color: var(--pink);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.fraction-mixed {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.fraction-conversions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.conversion-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 20px;
+  background: #f8fafc;
+  border-radius: var(--radius-md);
+  min-width: 100px;
+}
+
+.conversion-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.conversion-value {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--text-primary);
+}
+
+.equivalents-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.equivalent-chip {
+  padding: 10px 18px;
+  background: #f8fafc;
+  border-radius: var(--radius-md);
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.equivalent-chip.base {
+  background: #fdf2f8;
+  color: var(--pink);
+  border: 2px solid var(--pink);
+}
+
+.compare-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.compare-fraction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.number-stepper.small {
+  gap: 6px;
+  margin: 0;
+}
+
+.number-stepper.small button {
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+}
+
+.number-stepper.small .stepper-value {
+  font-size: 20px;
+  min-width: 30px;
+}
+
+.compare-symbol {
+  font-size: 40px;
+  font-weight: 900;
+  color: var(--purple);
+}
+
+.fraction-explanation {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+  .fraction-explanation {
+    grid-template-columns: 1fr;
+  }
+  .fraction-display-row {
+    gap: 16px;
+  }
+}
+
+/* ===== Streak Calendar ===== */
+.streak-stats-row {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.streak-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.streak-stat-value {
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--pink);
+}
+
+.streak-stat-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.streak-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 6px;
+}
+
+.streak-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #f1f5f9;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.streak-day.active {
+  background: linear-gradient(135deg, #fb923c, #ef4444);
+  font-size: 15px;
+}
+
+.streak-day.today {
+  outline: 2px solid var(--purple);
+  outline-offset: 1px;
+}
+
+@media (max-width: 768px) {
+  .streak-calendar-grid {
+    grid-template-columns: repeat(7, 1fr);
+  }
+}
+
+/* ===== Download Buttons ===== */
+.download-buttons-section {
+  margin-top: 28px;
+  padding: 20px;
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+.download-buttons-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+}
+
+.download-buttons-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+}
+
+.download-btn.notes {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+}
+
+.download-btn.slides {
+  background: linear-gradient(135deg, #fb923c, #f59e0b);
 }

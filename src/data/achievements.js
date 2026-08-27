@@ -103,6 +103,14 @@ export const ACHIEVEMENTS = [
     requirement: { type: 'explore_div', count: 15 },
     xp: 150,
   },
+  {
+    id: 'fraction_fan',
+    title: 'Fraction Fan',
+    description: 'Build 10 fractions in Fractions & Decimals',
+    icon: '🍕',
+    requirement: { type: 'fractions', count: 10 },
+    xp: 100,
+  },
 ];
 
 export function checkAchievements(progress) {
@@ -157,6 +165,9 @@ export function checkAchievements(progress) {
         break;
       case 'explore_div':
         earned = (progress.numbersExplored || []).length >= req.count;
+        break;
+      case 'fractions':
+        earned = (progress.fractionsBuilt || 0) >= req.count;
         break;
       default:
         break;
