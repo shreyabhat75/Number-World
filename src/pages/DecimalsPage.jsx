@@ -390,6 +390,7 @@ function ConvertTab() {
   const ftodSteps = useMemo(() => {
     if (fracDen === 0) return [];
     const s = simplifyFraction(fracNum, fracDen);
+    const g = gcd(Math.abs(s.num), s.den);
     const dividend = Math.abs(s.num);
     const divisor = s.den;
     const neg = s.num < 0;
