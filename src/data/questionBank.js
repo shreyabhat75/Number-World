@@ -281,14 +281,14 @@ export const questionBank = {
 
   'direction-sense': {
     practice: [
-      { q: 'If you face North and turn 90 degrees clockwise, which direction do you face?', options: ['South', 'East', 'West', 'North'], answer: 1, explanation: 'Clockwise from North: North -> East -> South -> West. A 90-degree clockwise turn from North faces East.' },
-      { q: 'East and West are:', options: ['Same direction', 'Opposite directions', 'Perpendicular', 'Parallel'], answer: 1, explanation: 'East and West are opposite directions on a compass. They are 180 degrees apart.' },
-      { q: 'If you face South and turn 180 degrees, which direction do you face?', options: ['South', 'East', 'North', 'West'], answer: 2, explanation: 'A 180-degree turn always faces the opposite direction. South becomes North.' },
-      { q: 'At noon, the shadow of an object falls towards the:', options: ['North', 'South', 'East', 'West'], answer: 0, explanation: 'At noon (in the Northern Hemisphere), the sun is to the south, so shadows fall towards the north.' },
-      { q: 'If you walk 5 km East then 5 km West, where are you?', options: ['5 km East of start', '5 km West of start', 'At the starting point', '10 km from start'], answer: 2, explanation: 'Walking equal distances in opposite directions brings you back to the starting point.' },
-      { q: 'North-East is between which two directions?', options: ['North and South', 'North and East', 'East and West', 'South and East'], answer: 1, explanation: 'North-East is the direction exactly between North and East, at 45 degrees from each.' },
-      { q: 'If you face West and turn 90 degrees anticlockwise, you face:', options: ['North', 'South', 'East', 'West'], answer: 1, explanation: 'Anticlockwise from West: West -> South. A 90-degree anticlockwise turn from West faces South.' },
-      { q: 'Morning shadows fall towards the:', options: ['East', 'West', 'North', 'South'], answer: 1, explanation: 'In the morning, the sun is in the east, so shadows fall towards the west.' }
+      { q: 'Which direction is opposite to North?', options: ['East', 'West', 'South', 'North'], answer: 2, explanation: 'North and South are opposite directions on a compass.' },
+      { q: 'Which direction is opposite to East?', options: ['North', 'South', 'West', 'East'], answer: 2, explanation: 'East and West are opposite directions on a compass.' },
+      { q: 'If you face North and turn 90 degrees clockwise, which direction do you face?', options: ['South', 'East', 'West', 'North'], answer: 1, explanation: 'Clockwise from North: North -> East. A 90-degree clockwise turn from North faces East.' },
+      { q: 'If you face East and turn 90 degrees clockwise, which direction do you face?', options: ['North', 'South', 'East', 'West'], answer: 1, explanation: 'Clockwise from East: East -> South. A 90-degree clockwise turn from East faces South.' },
+      { q: 'A person walks 5 km North, then 3 km East, then 5 km South. Which direction is he from the start?', options: ['North', 'South', 'West', 'East'], answer: 3, explanation: '5 km North + 5 km South cancels out. He is 3 km East of the starting point.' },
+      { q: 'In the morning, where does a shadow point?', options: ['East', 'West', 'North', 'South'], answer: 1, explanation: 'In the morning, the sun is in the east, so shadows fall towards the west.' },
+      { q: 'A person walks 3 km North then 4 km East. How far is he from the starting point?', options: ['7 km', '5 km', '1 km', '12 km'], answer: 1, explanation: 'This forms a right triangle with legs 3 and 4. By Pythagoras: sqrt(9+16) = sqrt(25) = 5 km.' },
+      { q: 'A person walks 6 km North then 8 km East. How far is he from the starting point?', options: ['14 km', '2 km', '10 km', '48 km'], answer: 2, explanation: 'By Pythagoras: sqrt(36+64) = sqrt(100) = 10 km.' }
     ],
     quiz: [
       { q: 'If you face North and turn 270 degrees clockwise, which direction do you face?', options: ['East', 'South', 'West', 'North'], answer: 2, explanation: '270 degrees clockwise from North: N->E(90)->S(180)->W(270). You face West.' },

@@ -13,29 +13,6 @@ function getTurnResult(current, turn) {
   return current;
 }
 
-const QUIZ_QUESTIONS = [
-  { q: 'Riya is facing North. She turns right. Which direction is she facing?', answer: 'East', options: ['East', 'West', 'North', 'South'] },
-  { q: 'A boy is facing East. He turns left. Which direction is he facing?', answer: 'North', options: ['South', 'North', 'West', 'East'] },
-  { q: 'A girl walks 5 steps North and then 5 steps South. Where is she?', answer: 'Same place', options: ['5 steps North', '5 steps South', 'Same place', '5 steps East'] },
-  { q: 'Arun is facing South. He turns right. Which direction is he facing?', answer: 'West', options: ['East', 'West', 'North', 'South'] },
-  { q: 'Meena walks East and then turns left. Which direction does she face?', answer: 'North', options: ['North', 'South', 'East', 'West'] },
-  { q: 'A person facing West turns left. Which direction are they facing?', answer: 'South', options: ['North', 'East', 'South', 'West'] },
-  { q: 'Kiran walks 3 steps North, then 4 steps East. Where is he from start?', answer: 'North-East', options: ['North-West', 'North-East', 'South-East', 'South-West'] },
-  { q: 'A person faces North, turns right, then right again. Which direction?', answer: 'South', options: ['East', 'West', 'North', 'South'] },
-  { q: 'A student walks West and then turns right. Which direction?', answer: 'North', options: ['North', 'South', 'East', 'West'] },
-  { q: 'A person walks 2 steps South, then 2 steps East. Where from start?', answer: 'South-East', options: ['North-East', 'South-East', 'South-West', 'North-West'] },
-  { q: 'Anu faces North and turns left twice. Which direction?', answer: 'South', options: ['East', 'West', 'North', 'South'] },
-  { q: 'Raj walks East, then West same distance. Where is he?', answer: 'Starting point', options: ['East', 'West', 'Starting point', 'North'] },
-  { q: 'If North is in front of you, which direction is on your right?', answer: 'East', options: ['East', 'West', 'North', 'South'] },
-  { q: 'A car travels North, then turns right. Which direction next?', answer: 'East', options: ['East', 'West', 'North', 'South'] },
-  { q: 'A person faces East and turns around. Which direction now?', answer: 'West', options: ['North', 'South', 'East', 'West'] },
-  { q: 'A child walks 6m North and 2m East. Direction from start?', answer: 'North-East', options: ['North-West', 'North-East', 'South-East', 'South-West'] },
-  { q: 'A person faces South and turns left. Which direction?', answer: 'East', options: ['East', 'West', 'North', 'South'] },
-  { q: 'A person faces East and turns right. Which direction?', answer: 'South', options: ['North', 'South', 'East', 'West'] },
-  { q: 'A person faces West and turns right. Which direction?', answer: 'North', options: ['North', 'South', 'East', 'West'] },
-  { q: 'Facing North, turn right three times. Which direction?', answer: 'West', options: ['East', 'West', 'North', 'South'] },
-];
-
 function InteractiveCompass() {
   const [needleDir, setNeedleDir] = useState('North');
 
@@ -102,6 +79,139 @@ function TurnSimulator() {
           </motion.div>
         )}
       </AnimatePresence>
+    </div>
+  );
+}
+
+function MovementTracker() {
+  const [moves, setMoves] = useState([]);
+  const [facing, setFacing] = useState('North');
+  const [inputSteps, setInputSteps] = useState(3);
+  const GRID_SIZE = 7;
+  const CENTER = Math.floor(GRID_SIZE / 2);
+
+  const getGridPosition = useCallback(() => {
+    let x = CENTER, y = CENTER;
+    let currentDir = 'North';
+    for (const move of moves) {
+      const steps = move.steps;
+      switch (currentDir) {
+        case 'North': y -= steps; break;
+        case 'South': y += steps; break;
+        case 'East': x += steps; break;
+        case 'West': x -= steps; break;
+        default: break;
+      }
+      currentDir = move.faceAfter;
+    }
+    return { x: Math.max(0, Math.min(GRID_SIZE - 1, x)), y: Math.max(0, Math.min(GRID_SIZE - 1, y)) };
+  }, [moves]);
+
+  const getPathCells = useCallback(() => {
+    const cells = [];
+    let x = CENTER, y = CENTER;
+    let currentDir = 'North';
+    cells.push({ x, y, dir: currentDir });
+    for (const move of moves) {
+      for (let i = 0; i < move.steps; i++) {
+        switch (currentDir) {
+          case 'North': y--; break;
+          case 'South': y++; break;
+          case 'East': x++; break;
+          case 'West': x--; break;
+          default: break;
+        }
+        x = Math.max(0, Math.min(GRID_SIZE - 1, x));
+        y = Math.max(0, Math.min(GRID_SIZE - 1, y));
+        cells.push({ x, y, dir: currentDir });
+      }
+      currentDir = move.faceAfter;
+    }
+    return cells;
+  }, [moves]);
+
+  const addMove = useCallback((turn) => {
+    const faceAfter = turn === 'none' ? facing : getTurnResult(facing, turn);
+    setMoves(prev => [...prev, { steps: inputSteps, turn, faceAfter }]);
+    setFacing(faceAfter);
+  }, [facing, inputSteps]);
+
+  const reset = useCallback(() => {
+    setMoves([]);
+    setFacing('North');
+  }, []);
+
+  const pos = getGridPosition();
+  const pathCells = getPathCells();
+
+  return (
+    <div className="ds-card">
+      <h2>🚶 Movement Tracker</h2>
+      <p>Walk forward, then turn. Watch your path on the grid!</p>
+
+      <div className="ds-movement-grid-wrapper">
+        <div className="ds-movement-grid">
+          {Array.from({ length: GRID_SIZE }).map((_, row) => (
+            <div key={row} className="ds-grid-row">
+              {Array.from({ length: GRID_SIZE }).map((_, col) => {
+                const isStart = row === CENTER && col === CENTER;
+                const isHere = row === pos.y && col === pos.x;
+                const isPath = pathCells.some(c => c.x === col && c.y === row);
+                return (
+                  <div
+                    key={col}
+                    className={`ds-grid-cell ${isStart ? 'ds-cell-start' : ''} ${isHere ? 'ds-cell-here' : ''} ${isPath && !isHere ? 'ds-cell-path' : ''}`}
+                  >
+                    {isStart && '🏁'}
+                    {isHere && !isStart && `🧑${DIR_ARROWS[facing]}`}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="ds-movement-info">
+        <span>Current: <strong>{facing} {DIR_ARROWS[facing]}</strong></span>
+        <span>Position: ({pos.x - CENTER}, {CENTER - pos.y})</span>
+      </div>
+
+      <div className="ds-movement-controls">
+        <div className="ds-steps-input">
+          <label>Steps:</label>
+          <input
+            type="number"
+            min="1"
+            max="6"
+            value={inputSteps}
+            onChange={e => setInputSteps(Math.max(1, Math.min(6, parseInt(e.target.value) || 1)))}
+            className="ds-num-input"
+          />
+        </div>
+        <div className="ds-move-btns">
+          <button className="ds-action-btn ds-move-btn" onClick={() => addMove('none')}>
+            ⬆️ Walk {inputSteps}
+          </button>
+          <button className="ds-action-btn ds-move-btn" onClick={() => addMove('left')}>
+            ↩ Left + Walk
+          </button>
+          <button className="ds-action-btn ds-move-btn" onClick={() => addMove('right')}>
+            ↪ Right + Walk
+          </button>
+        </div>
+        <button className="ds-reset-btn" onClick={reset}>↻ Reset Path</button>
+      </div>
+
+      {moves.length > 0 && (
+        <div className="ds-moves-log">
+          <strong>Moves:</strong> {moves.map((m, i) => (
+            <span key={i} className="ds-move-tag">
+              {m.turn === 'none' ? `↑${m.steps}` : `${m.turn === 'left' ? '←' : '→'}${m.steps}`}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -267,276 +377,24 @@ function LatitudeLongitude() {
   );
 }
 
-function MovementTracker() {
-  const [moves, setMoves] = useState([]);
-  const [facing, setFacing] = useState('North');
-  const [inputSteps, setInputSteps] = useState(3);
-  const GRID_SIZE = 7;
-  const CENTER = Math.floor(GRID_SIZE / 2);
-
-  const getGridPosition = useCallback(() => {
-    let x = CENTER, y = CENTER;
-    let currentDir = 'North';
-    for (const move of moves) {
-      const steps = move.steps;
-      switch (currentDir) {
-        case 'North': y -= steps; break;
-        case 'South': y += steps; break;
-        case 'East': x += steps; break;
-        case 'West': x -= steps; break;
-        default: break;
-      }
-      currentDir = move.faceAfter;
-    }
-    return { x: Math.max(0, Math.min(GRID_SIZE - 1, x)), y: Math.max(0, Math.min(GRID_SIZE - 1, y)) };
-  }, [moves]);
-
-  const getPathCells = useCallback(() => {
-    const cells = [];
-    let x = CENTER, y = CENTER;
-    let currentDir = 'North';
-    cells.push({ x, y, dir: currentDir });
-    for (const move of moves) {
-      for (let i = 0; i < move.steps; i++) {
-        switch (currentDir) {
-          case 'North': y--; break;
-          case 'South': y++; break;
-          case 'East': x++; break;
-          case 'West': x--; break;
-          default: break;
-        }
-        x = Math.max(0, Math.min(GRID_SIZE - 1, x));
-        y = Math.max(0, Math.min(GRID_SIZE - 1, y));
-        cells.push({ x, y, dir: currentDir });
-      }
-      currentDir = move.faceAfter;
-    }
-    return cells;
-  }, [moves]);
-
-  const addMove = useCallback((turn) => {
-    const faceAfter = turn === 'none' ? facing : getTurnResult(facing, turn);
-    setMoves(prev => [...prev, { steps: inputSteps, turn, faceAfter }]);
-    setFacing(faceAfter);
-  }, [facing, inputSteps]);
-
-  const reset = useCallback(() => {
-    setMoves([]);
-    setFacing('North');
-  }, []);
-
-  const pos = getGridPosition();
-  const pathCells = getPathCells();
-
-  return (
-    <div className="ds-card">
-      <h2>🚶 Movement Tracker</h2>
-      <p>Walk forward, then turn. Watch your path on the grid!</p>
-
-      <div className="ds-movement-grid-wrapper">
-        <div className="ds-movement-grid">
-          {Array.from({ length: GRID_SIZE }).map((_, row) => (
-            <div key={row} className="ds-grid-row">
-              {Array.from({ length: GRID_SIZE }).map((_, col) => {
-                const isStart = row === CENTER && col === CENTER;
-                const isHere = row === pos.y && col === pos.x;
-                const isPath = pathCells.some(c => c.x === col && c.y === row);
-                return (
-                  <div
-                    key={col}
-                    className={`ds-grid-cell ${isStart ? 'ds-cell-start' : ''} ${isHere ? 'ds-cell-here' : ''} ${isPath && !isHere ? 'ds-cell-path' : ''}`}
-                  >
-                    {isStart && '🏁'}
-                    {isHere && !isStart && `🧑${DIR_ARROWS[facing]}`}
-                  </div>
-                );
-              })}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="ds-movement-info">
-        <span>Current: <strong>{facing} {DIR_ARROWS[facing]}</strong></span>
-        <span>Position: ({pos.x - CENTER}, {CENTER - pos.y})</span>
-      </div>
-
-      <div className="ds-movement-controls">
-        <div className="ds-steps-input">
-          <label>Steps:</label>
-          <input
-            type="number"
-            min="1"
-            max="6"
-            value={inputSteps}
-            onChange={e => setInputSteps(Math.max(1, Math.min(6, parseInt(e.target.value) || 1)))}
-            className="ds-num-input"
-          />
-        </div>
-        <div className="ds-move-btns">
-          <button className="ds-action-btn ds-move-btn" onClick={() => addMove('none')}>
-            ⬆️ Walk {inputSteps}
-          </button>
-          <button className="ds-action-btn ds-move-btn" onClick={() => addMove('left')}>
-            ↩ Left + Walk
-          </button>
-          <button className="ds-action-btn ds-move-btn" onClick={() => addMove('right')}>
-            ↪ Right + Walk
-          </button>
-        </div>
-        <button className="ds-reset-btn" onClick={reset}>↻ Reset Path</button>
-      </div>
-
-      {moves.length > 0 && (
-        <div className="ds-moves-log">
-          <strong>Moves:</strong> {moves.map((m, i) => (
-            <span key={i} className="ds-move-tag">
-              {m.turn === 'none' ? `↑${m.steps}` : `${m.turn === 'left' ? '←' : '→'}${m.steps}`}
-            </span>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function DirectionQuiz() {
-  const [score, setScore] = useState(0);
-  const [answered, setAnswered] = useState(Array(QUIZ_QUESTIONS.length).fill(false));
-  const [feedback, setFeedback] = useState(Array(QUIZ_QUESTIONS.length).fill(null));
-
-  const handleAnswer = useCallback((qi, option) => {
-    if (answered[qi]) return;
-    const newAnswered = [...answered];
-    newAnswered[qi] = true;
-    setAnswered(newAnswered);
-    const isCorrect = option === QUIZ_QUESTIONS[qi].answer;
-    const newFeedback = [...feedback];
-    newFeedback[qi] = isCorrect ? 'correct' : 'wrong';
-    setFeedback(newFeedback);
-    if (isCorrect) setScore(s => s + 1);
-  }, [answered, feedback]);
-
-  const resetQuiz = useCallback(() => {
-    setScore(0);
-    setAnswered(Array(QUIZ_QUESTIONS.length).fill(false));
-    setFeedback(Array(QUIZ_QUESTIONS.length).fill(null));
-  }, []);
-
-  return (
-    <div className="ds-card">
-      <h2>🎯 Practice Quiz — {QUIZ_QUESTIONS.length} Questions</h2>
-      <div className="ds-quiz-score">Score: {score} / {QUIZ_QUESTIONS.length}</div>
-      <button className="ds-reset-btn" onClick={resetQuiz}>↻ Reset Quiz</button>
-      {QUIZ_QUESTIONS.map((q, qi) => (
-        <div key={qi} className="ds-quiz-q">
-          <p><strong>Q{qi + 1}.</strong> {q.q}</p>
-          <div className="ds-quiz-options">
-            {q.options.map(opt => {
-              let cls = 'ds-quiz-option';
-              if (answered[qi]) {
-                if (opt === q.answer) cls += ' ds-correct';
-                else if (feedback[qi] === 'wrong' && opt !== q.answer) cls += '';
-              }
-              return (
-                <button key={opt} className={cls} onClick={() => handleAnswer(qi, opt)}>
-                  {opt}
-                </button>
-              );
-            })}
-          </div>
-          {feedback[qi] === 'correct' && <div className="ds-quiz-feedback ds-correct">✅ Correct!</div>}
-          {feedback[qi] === 'wrong' && <div className="ds-quiz-feedback ds-wrong">❌ Answer: {q.answer}</div>}
-        </div>
-      ))}
-    </div>
-  );
-}
-
 export default function DirectionSensePage() {
-  const [activeTab, setActiveTab] = useState('learn');
-
   return (
     <div className="ds-page">
       <div className="ds-header">
         <h1>🧭 Direction Sense</h1>
-        <p>Learn directions, practise reasoning, and explore how directions work in real life.</p>
+        <p>Explore how directions, turns, shadows, and coordinates work.</p>
       </div>
 
-      <div className="ds-tabs">
-        {[
-          { id: 'learn', icon: '📚', label: 'Learn' },
-          { id: 'practice', icon: '🎯', label: 'Practice' },
-          { id: 'activity', icon: '🚶', label: 'Activity' },
-        ].map(tab => (
-          <button
-            key={tab.id}
-            className={`ds-tab ${activeTab === tab.id ? 'ds-tab-active' : ''}`}
-            onClick={() => setActiveTab(tab.id)}
-          >
-            {tab.icon} {tab.label}
-          </button>
-        ))}
+      <InteractiveCompass />
+      <TurnSimulator />
+      <MovementTracker />
+      <ShadowSimulator />
+      <LatitudeLongitude />
+
+      <div className="ds-card ds-fun-fact">
+        <h3>💡 Fun Fact</h3>
+        <p>Before modern clocks and GPS, people used the Sun, shadows, and other observations to help understand direction and estimate time!</p>
       </div>
-
-      <AnimatePresence mode="wait">
-        {activeTab === 'learn' && (
-          <motion.div key="learn" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-            <InteractiveCompass />
-            <TurnSimulator />
-            <ShadowSimulator />
-            <LatitudeLongitude />
-
-            <div className="ds-card ds-fun-fact">
-              <h3>💡 Fun Fact</h3>
-              <p>Before modern clocks and GPS, people used the Sun, shadows, and other observations to help understand direction and estimate time!</p>
-            </div>
-          </motion.div>
-        )}
-
-        {activeTab === 'practice' && (
-          <motion.div key="practice" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-            <MovementTracker />
-            <DirectionQuiz />
-          </motion.div>
-        )}
-
-        {activeTab === 'activity' && (
-          <motion.div key="activity" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-            <div className="ds-card">
-              <h2>🚶 Real-World Compass Activity</h2>
-              <p>Use a physical compass or the compass app on a phone.</p>
-              <ol className="ds-activity-list">
-                <li>Ask students to stand and find <strong>North</strong>.</li>
-                <li>Say "Turn right." Ask which direction they face.</li>
-                <li>Try "Turn left twice" and "Turn around."</li>
-                <li>Give movement challenges: <strong>"Walk 4 steps North, turn right, then walk 3 steps."</strong></li>
-                <li>Ask where they are compared with their starting point.</li>
-              </ol>
-              <div className="ds-challenge-box">
-                <strong>⭐ Group Challenge:</strong> One student is the navigator. They give 3–5 movement instructions while another student follows. Everyone checks the final direction together.
-              </div>
-            </div>
-
-            <div className="ds-card">
-              <h2>💡 Questions You Can Ask</h2>
-              <ul className="ds-questions-list">
-                <li>"If East is on your right, which way are you facing?"</li>
-                <li>"You are facing South and turn left. Where are you facing?"</li>
-                <li>"If you move North and then East, where are you compared with your starting point?"</li>
-                <li>"Can you draw your movement instead of only imagining it?"</li>
-              </ul>
-            </div>
-
-            <div className="ds-card ds-fun-fact">
-              <h3>🧭 Why does a shadow change?</h3>
-              <p>Imagine a stick standing in the ground. The Sun shines on it, and the stick blocks the light. The dark shape behind it is the <strong>shadow</strong>.</p>
-              <p>In the morning, the Sun is in one part of the sky, so the shadow points in one direction. Around midday, the Sun is higher, so the shadow is usually shorter. Later in the day, the Sun moves lower again and the shadow becomes longer and points in another direction.</p>
-              <p><strong>Try this:</strong> Ask students to place a bottle or stick in sunlight and check its shadow at different times. They can observe both the direction and length changing.</p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
