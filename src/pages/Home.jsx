@@ -9,6 +9,7 @@ const TOPIC_CARDS = [
   { key: 'integers', icon: '➕➖', title: 'Integers', desc: 'Explore both sides of zero!', color: '#a78bfa', gradient: 'linear-gradient(135deg, #a78bfa, #8b5cf6)' },
   { key: 'primes', icon: '⭐', title: 'Prime Numbers', desc: 'Meet the special numbers!', color: '#fbbf24', gradient: 'linear-gradient(135deg, #fbbf24, #f59e0b)' },
   { key: 'factor-tree', icon: '🌳', title: 'Prime Factor Tree', desc: 'Grow numbers into primes!', color: '#34d399', gradient: 'linear-gradient(135deg, #34d399, #10b981)' },
+  { key: 'direction-sense', icon: '🧭', title: 'Direction Sense', desc: 'Navigate with logic & reasoning!', color: '#e6b94f', gradient: 'linear-gradient(135deg, #e6b94f, #d69e2e)' },
   { key: 'quiz', icon: '🎮', title: 'Quiz Time', desc: 'Test your number skills!', color: '#f472b6', gradient: 'linear-gradient(135deg, #f472b6, #ec4899)' },
 ];
 

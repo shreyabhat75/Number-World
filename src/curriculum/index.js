@@ -15,6 +15,7 @@ const PropertiesPage = lazy(() => import('../pages/PropertiesPage'));
 const FractionsPage = lazy(() => import('../pages/FractionsPage'));
 const DecimalsPage = lazy(() => import('../pages/DecimalsPage'));
 const BasesPage = lazy(() => import('../pages/BasesPage'));
+const DirectionSensePage = lazy(() => import('../pages/DirectionSensePage'));
 
 export const curriculum = {
   id: 'aptify',
@@ -213,8 +214,19 @@ export const curriculum = {
           icon: '🧩',
           color: '#f59e0b',
           description: 'Coding-decoding, series, analogies, and puzzles.',
-          topics: [],
-          status: 'coming-soon',
+          topics: [
+            {
+              id: 'direction-sense',
+              title: 'Direction Sense',
+              icon: '🧭',
+              order: 0,
+              difficulty: 'beginner',
+              description: 'Learn directions, turns, shadows, and movement tracking.',
+              route: 'direction-sense',
+              component: DirectionSensePage,
+              type: 'interactive',
+            },
+          ],
         },
       ],
     },
