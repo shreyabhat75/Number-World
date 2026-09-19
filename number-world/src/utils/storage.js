@@ -46,6 +46,7 @@ export function getProgress() {
     bestStreak: loadState('bestStreak', 0),
     totalCorrect: loadState('totalCorrect', 0),
     totalAnswered: loadState('totalAnswered', 0),
+    darkMode: loadState('darkMode', false),
     settings: loadState('settings', {
       soundEffects: true,
       animations: true,
@@ -66,6 +67,14 @@ export function addXP(amount) {
   saveState('xp', xp);
   saveState('level', level);
   return { xp, level };
+}
+
+export function getDarkMode() {
+  return loadState('darkMode', false);
+}
+
+export function setDarkMode(value) {
+  saveState('darkMode', value);
 }
 
 export function getLevelFromXP(xp) {

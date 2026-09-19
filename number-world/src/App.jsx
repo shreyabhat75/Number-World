@@ -4,11 +4,10 @@ import TopicPageLayout from './components/TopicPageLayout/TopicPageLayout';
 import Home from './pages/Home';
 import Achievements from './pages/Achievements';
 import Settings from './pages/Settings';
-const QuizPage = lazy(() => import('./pages/QuizPage'));
 import Confetti from './components/Confetti/Confetti';
 import Practice from './components/Practice/Practice';
 import TopicQuiz from './components/TopicQuiz/TopicQuiz';
-import { getProgress, saveState, addXP, clearAllState } from './utils/storage';
+import { getProgress, saveState, addXP, clearAllState, loadState } from './utils/storage';
 import { checkAchievements } from './data/achievements';
 import { getTopicByRoute } from './curriculum';
 import { questionBank } from './data/questionBank';
@@ -110,6 +109,11 @@ export default function App() {
     setProgress(getProgress());
   }, []);
 
+  const handleDarkModeToggle = useCallback(() => {
+    const newValue = !progress.darkMode;
+    persistProgress({ darkMode: newValue });
+  }, [progress.darkMode, persistProgress]);
+
   const handleTreeComplete = useCallback((result) => {
     const xp = result.xp || 25;
     const newXP = addXP(xp);
@@ -128,16 +132,10 @@ export default function App() {
     switch (currentPage) {
       case 'home':
         return <Home onNavigate={handleNavigate} xp={progress.xp} level={progress.level} onDailyComplete={handleDailyComplete} dailyCompleted={false} progress={progress} />;
-      case 'quiz':
-        return (
-          <Suspense fallback={<div className="topic-loading"><div className="loading-spinner" /><p>Loading quiz...</p></div>}>
-            <QuizPage onCorrect={handleQuizCorrect} onWrong={handleQuizWrong} />
-          </Suspense>
-        );
       case 'achievements':
         return <Achievements unlockedAchievements={progress.achievements || []} />;
       case 'settings':
-        return <Settings settings={progress.settings || { soundEffects: true, animations: true, reducedMotion: false }} onSettingsChange={handleSettingsChange} onResetProgress={handleResetProgress} />;
+        return <Settings settings={progress.settings || { soundEffects: true, animations: true, reducedMotion: false }} onSettingsChange={handleSettingsChange} onResetProgress={handleResetProgress} darkMode={progress.darkMode || false} onDarkModeToggle={handleDarkModeToggle} />;
       default: {
         const topic = getTopicByRoute(currentPage);
         if (topic && topic.component) {
@@ -160,12 +158,12 @@ export default function App() {
               onBack={() => handleNavigate('home')}
               practiceContent={
                 bankData && bankData.practice
-                  ? <Practice questions={bankData.practice} />
+                  ? <Practice questions={bankData.practice} topicId={topic.id} />
                   : <div className="topic-loading"><p>Practice questions coming soon!</p></div>
               }
               quizContent={
                 bankData && bankData.quiz
-                  ? <TopicQuiz questions={bankData.quiz} onCorrect={handleQuizCorrect} onWrong={handleQuizWrong} />
+                  ? <TopicQuiz questions={bankData.quiz} onCorrect={handleQuizCorrect} onWrong={handleQuizWrong} topicId={topic.id} />
                   : <div className="topic-loading"><p>Quiz questions coming soon!</p></div>
               }
             >
@@ -186,6 +184,7 @@ export default function App() {
         xp={progress.xp}
         level={progress.level}
         settings={progress.settings}
+        darkMode={progress.darkMode || false}
       >
         {renderPage()}
       </Layout>

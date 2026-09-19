@@ -1,7 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { loadState, saveState } from '../../utils/storage';
 
-export default function TopicQuiz({ questions = [], onCorrect, onWrong }) {
+export default function TopicQuiz({ questions = [], onCorrect, onWrong, topicId }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [submitted, setSubmitted] = useState(false);
@@ -9,9 +10,32 @@ export default function TopicQuiz({ questions = [], onCorrect, onWrong }) {
   const [streak, setStreak] = useState(0);
   const [maxStreak, setMaxStreak] = useState(0);
 
-  const currentQuestion = questions[currentIndex];
-  const isFinished = currentIndex >= questions.length;
-  const accuracy = questions.length > 0 ? Math.round((score / questions.length) * 100) : 0;
+  const completedKey = topicId ? `quiz_done_${topicId}` : null;
+
+  const completedSet = useMemo(() => {
+    if (!completedKey) return new Set();
+    const stored = loadState('completedQuestions', {});
+    return new Set(stored[completedKey] || []);
+  }, [completedKey]);
+
+  const filteredQuestions = useMemo(() => {
+    if (!completedSet.size) return questions;
+    return questions.filter((_, index) => !completedSet.has(index));
+  }, [questions, completedSet]);
+
+  const markCompleted = useCallback((index) => {
+    if (!completedKey) return;
+    const stored = loadState('completedQuestions', {});
+    const existing = stored[completedKey] || [];
+    if (!existing.includes(index)) {
+      stored[completedKey] = [...existing, index];
+      saveState('completedQuestions', stored);
+    }
+  }, [completedKey]);
+
+  const currentQuestion = filteredQuestions[currentIndex];
+  const isFinished = currentIndex >= filteredQuestions.length;
+  const accuracy = filteredQuestions.length > 0 ? Math.round((score / filteredQuestions.length) * 100) : 0;
 
   const handleSubmit = useCallback(() => {
     if (selectedOption === null || submitted) return;
@@ -26,12 +50,14 @@ export default function TopicQuiz({ questions = [], onCorrect, onWrong }) {
         setMaxStreak(max => Math.max(max, newStreak));
         return newStreak;
       });
+      const originalIndex = questions.indexOf(currentQuestion);
+      if (originalIndex !== -1) markCompleted(originalIndex);
       onCorrect?.();
     } else {
       setStreak(0);
       onWrong?.();
     }
-  }, [selectedOption, submitted, currentQuestion, onCorrect, onWrong]);
+  }, [selectedOption, submitted, currentQuestion, onCorrect, onWrong, questions, markCompleted]);
 
   const handleNext = useCallback(() => {
     setSelectedOption(null);
@@ -39,7 +65,7 @@ export default function TopicQuiz({ questions = [], onCorrect, onWrong }) {
     setCurrentIndex(prev => prev + 1);
   }, []);
 
-  if (questions.length === 0) {
+  if (filteredQuestions.length === 0) {
     return (
       <div className="quiz-container">
         <div className="quiz-question-area">
@@ -62,7 +88,7 @@ export default function TopicQuiz({ questions = [], onCorrect, onWrong }) {
           <div className="quiz-score">
             <span className="score-value">{score}</span>
             <span className="score-divider">/</span>
-            <span className="score-total">{questions.length}</span>
+            <span className="score-total">{filteredQuestions.length}</span>
           </div>
           <div className="accuracy-display">
             <span className="accuracy-value">{accuracy}%</span>
@@ -119,7 +145,7 @@ export default function TopicQuiz({ questions = [], onCorrect, onWrong }) {
           )}
         </div>
         <div className="quiz-count">
-          {currentIndex + 1} / {questions.length}
+          {currentIndex + 1} / {filteredQuestions.length}
         </div>
       </div>
 
@@ -208,7 +234,7 @@ export default function TopicQuiz({ questions = [], onCorrect, onWrong }) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              {currentIndex === questions.length - 1 ? "See Results" : "Next Question →"}
+              {currentIndex === filteredQuestions.length - 1 ? "See Results" : "Next Question →"}
             </motion.button>
           )}
         </motion.div>

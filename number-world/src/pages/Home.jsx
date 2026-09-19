@@ -9,7 +9,6 @@ import { dailyQuestionPool } from '../data/questionBank';
 const QUICK_ACTIONS = [
   { icon: '📖', label: 'Learn', desc: 'Explore concepts', route: 'natural' },
   { icon: '✏️', label: 'Practice', desc: 'Solve questions', route: 'primes' },
-  { icon: '🎯', label: 'Quiz', desc: 'Test your knowledge', route: 'quiz' },
 ];
 
 function getDailyQuestion() {
@@ -146,7 +145,7 @@ const FLOATING_NUMBERS = ['1', '2', '3', '5', '7', '8', '11', '13', '17', '42', 
 export default function Home({ onNavigate, xp, level, onDailyComplete, dailyCompleted, progress }) {
   return (
     <div className="home-page">
-      <div className="floating-background">
+      <div className="floating-background" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
         {FLOATING_NUMBERS.map((num, i) => (
           <motion.span
             key={i}
@@ -171,7 +170,7 @@ export default function Home({ onNavigate, xp, level, onDailyComplete, dailyComp
         ))}
       </div>
 
-      <section className="hero-section">
+      <section className="hero-section" style={{ position: 'relative', zIndex: 1 }}>
         <motion.div
           className="hero-content"
           initial={{ opacity: 0, y: 30 }}
@@ -197,7 +196,7 @@ export default function Home({ onNavigate, xp, level, onDailyComplete, dailyComp
         </motion.div>
       </section>
 
-      <div className="home-dashboard">
+      <div className="home-dashboard" style={{ position: 'relative', zIndex: 1 }}>
         <div className="home-dashboard-left">
           <QuestionOfTheDay onNavigate={onNavigate} />
           <ContinueLearning progress={progress} onNavigate={onNavigate} />
@@ -230,25 +229,10 @@ export default function Home({ onNavigate, xp, level, onDailyComplete, dailyComp
             </div>
           </motion.div>
 
-          <motion.div
-            className="home-card"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25 }}
-          >
-            <div className="home-card-header">
-              <span className="home-card-icon">🔥</span>
-              <h3>Daily Challenge</h3>
-            </div>
-            <p className="home-dc-desc">Can you solve today's number puzzle?</p>
-            <button className="home-dc-btn" onClick={() => onNavigate('quiz')}>
-              Start Challenge →
-            </button>
-          </motion.div>
         </div>
       </div>
 
-      <section className="topics-section">
+      <section className="topics-section" style={{ position: 'relative', zIndex: 1 }}>
         <h2 className="section-title">Explore Topics</h2>
         <div className="topics-grid">
           {TOPIC_CARDS.map((card, i) => (

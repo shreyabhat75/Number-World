@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import XPBar from '../XPBar/XPBar';
 import { getNavSections } from '../../curriculum';
@@ -10,7 +10,6 @@ const TOP_NAV = [
 ];
 
 const BOTTOM_NAV = [
-  { key: 'quiz', icon: '🎮', label: 'Number Detective' },
   { key: 'achievements', icon: '🏆', label: 'Achievements' },
   { key: 'settings', icon: '⚙️', label: 'Settings' },
 ];
@@ -19,7 +18,7 @@ function isActiveRoute(currentPage, route) {
   return currentPage === route;
 }
 
-export default function Layout({ children, currentPage, onNavigate, xp, level, settings }) {
+export default function Layout({ children, currentPage, onNavigate, xp, level, settings, darkMode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [expandedModules, setExpandedModules] = useState(() => {
     const initial = {};
@@ -33,6 +32,10 @@ export default function Layout({ children, currentPage, onNavigate, xp, level, s
     return initial;
   });
   const prefersReduced = settings?.reducedMotion || false;
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+  }, [darkMode]);
 
   const toggleModule = (moduleId) => {
     setExpandedModules(prev => ({ ...prev, [moduleId]: !prev[moduleId] }));
@@ -178,16 +181,20 @@ export default function Layout({ children, currentPage, onNavigate, xp, level, s
       </main>
 
       <nav className="bottom-nav">
-        {[TOP_NAV[0], ...NAV_SECTIONS.flatMap(s => s.modules.flatMap(m => m.topics.filter(t => t.route).sort((a, b) => (a.order || 0) - (b.order || 0)).slice(0, 2))), BOTTOM_NAV[0]].slice(0, 6).map(item => (
-          <button
-            key={item.key || item.route}
-            className={`bottom-nav-item ${currentPage === (item.key || item.route) ? 'active' : ''}`}
-            onClick={() => onNavigate(item.key || item.route)}
-          >
-            <span className="bottom-nav-icon">{item.icon}</span>
-            <span className="bottom-nav-label">{item.label || item.title}</span>
-          </button>
-        ))}
+        <button
+          className={`bottom-nav-item ${currentPage === 'home' ? 'active' : ''}`}
+          onClick={() => onNavigate('home')}
+        >
+          <span className="bottom-nav-icon">🏠</span>
+          <span className="bottom-nav-label">Home</span>
+        </button>
+        <button
+          className="bottom-nav-item"
+          onClick={() => setSidebarOpen(true)}
+        >
+          <span className="bottom-nav-icon">☰</span>
+          <span className="bottom-nav-label">Topics</span>
+        </button>
       </nav>
     </div>
   );

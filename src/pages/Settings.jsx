@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 
-export default function Settings({ settings, onSettingsChange, onResetProgress }) {
+export default function Settings({ settings, onSettingsChange, onResetProgress, darkMode, onDarkModeToggle }) {
   const [showConfirm, setShowConfirm] = useState(false);
 
   const handleToggle = (key) => {
@@ -20,6 +20,23 @@ export default function Settings({ settings, onSettingsChange, onResetProgress }
       </motion.div>
 
       <div className="settings-list">
+        <div className="setting-item">
+          <div className="setting-info">
+            <span className="setting-icon">🌙</span>
+            <div>
+              <h4>Dark Mode</h4>
+              <p>Switch to dark theme for a better experience at night</p>
+            </div>
+          </div>
+          <button
+            className={`toggle-btn ${darkMode ? 'on' : 'off'}`}
+            onClick={onDarkModeToggle}
+            aria-label="Toggle dark mode"
+          >
+            <motion.div className="toggle-knob" animate={{ x: darkMode ? 22 : 0 }} />
+          </button>
+        </div>
+
         <div className="setting-item">
           <div className="setting-info">
             <span className="setting-icon">🔊</span>

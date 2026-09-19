@@ -1,22 +1,48 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { loadState, saveState } from '../../utils/storage';
 
-export default function Practice({ questions = [] }) {
+export default function Practice({ questions = [], topicId }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
 
-  const currentQuestion = questions[currentIndex];
-  const isFinished = currentIndex >= questions.length;
+  const completedKey = topicId ? `practice_done_${topicId}` : null;
+
+  const completedSet = useMemo(() => {
+    if (!completedKey) return new Set();
+    const stored = loadState('completedQuestions', {});
+    return new Set(stored[completedKey] || []);
+  }, [completedKey]);
+
+  const filteredQuestions = useMemo(() => {
+    if (!completedSet.size) return questions;
+    return questions.filter((_, index) => !completedSet.has(index));
+  }, [questions, completedSet]);
+
+  const markCompleted = useCallback((index) => {
+    if (!completedKey) return;
+    const stored = loadState('completedQuestions', {});
+    const existing = stored[completedKey] || [];
+    if (!existing.includes(index)) {
+      stored[completedKey] = [...existing, index];
+      saveState('completedQuestions', stored);
+    }
+  }, [completedKey]);
+
+  const currentQuestion = filteredQuestions[currentIndex];
+  const isFinished = currentIndex >= filteredQuestions.length;
 
   const handleSubmit = useCallback(() => {
     if (selectedOption === null || submitted) return;
     setSubmitted(true);
     if (selectedOption === currentQuestion.answer) {
       setScore(prev => prev + 1);
+      const originalIndex = questions.indexOf(currentQuestion);
+      if (originalIndex !== -1) markCompleted(originalIndex);
     }
-  }, [selectedOption, submitted, currentQuestion]);
+  }, [selectedOption, submitted, currentQuestion, questions, markCompleted]);
 
   const handleNext = useCallback(() => {
     setSelectedOption(null);
@@ -31,7 +57,7 @@ export default function Practice({ questions = [] }) {
     setScore(0);
   }, []);
 
-  if (questions.length === 0) {
+  if (filteredQuestions.length === 0) {
     return (
       <div className="practice-container">
         <div className="practice-question">
@@ -54,12 +80,12 @@ export default function Practice({ questions = [] }) {
           <div className="practice-score">
             <span className="score-value">{score}</span>
             <span className="score-divider">/</span>
-            <span className="score-total">{questions.length}</span>
+            <span className="score-total">{filteredQuestions.length}</span>
           </div>
           <p className="score-message">
-            {score === questions.length
+            {score === filteredQuestions.length
               ? "Perfect score! Excellent work!"
-              : score >= questions.length * 0.7
+              : score >= filteredQuestions.length * 0.7
               ? "Great job! Keep practicing!"
               : "Good effort! Try again to improve."}
           </p>
@@ -95,7 +121,7 @@ export default function Practice({ questions = [] }) {
     <div className="practice-container">
       <div className="practice-header">
         <span className="question-counter">
-          Question {currentIndex + 1} of {questions.length}
+          Question {currentIndex + 1} of {filteredQuestions.length}
         </span>
         <span className="current-score">Score: {score}</span>
       </div>
@@ -167,7 +193,7 @@ export default function Practice({ questions = [] }) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              {currentIndex === questions.length - 1 ? "See Results" : "Next Question"}
+              {currentIndex === filteredQuestions.length - 1 ? "See Results" : "Next Question"}
             </motion.button>
           )}
         </motion.div>
