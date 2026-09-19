@@ -4659,7 +4659,8 @@ body {
 
 .nav-item-coming-soon {
   opacity: 0.5;
-  cursor: default;
+  pointer-events: none;
+  font-style: italic;
 }
 
 .coming-soon-badge {
@@ -6733,62 +6734,25 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
-  padding: 10px 12px;
-  border: none;
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--text-primary);
-  font-size: 0.9rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.nav-module-toggle:hover {
-  background: var(--purple-soft);
 }
 
 .nav-expand-arrow {
-  transition: transform 0.3s ease;
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-}
-
-.nav-expand-arrow.expanded {
-  transform: rotate(90deg);
+  font-size: 14px;
+  font-weight: 900;
 }
 
 .nav-topics-list {
   overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.35s ease;
-}
-
-.nav-topics-list.expanded {
-  max-height: 500px;
 }
 
 .nav-item-topic {
-  display: block;
-  padding: 8px 12px 8px 32px;
-  border-radius: var(--radius-sm);
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s ease;
+  padding-left: 36px !important;
+  font-size: 13px !important;
 }
 
-.nav-item-topic:hover {
-  background: var(--purple-soft);
-  color: var(--purple);
-}
-
-.nav-item-topic.active {
-  background: var(--purple-soft);
-  color: var(--purple);
-  font-weight: 700;
+.nav-item-topic .nav-icon {
+  font-size: 16px !important;
+  width: 22px !important;
 }
 
 /* ---- Home Dashboard ---- */
