@@ -2,50 +2,6 @@
    APTIFY — Global Styles
    ============================================================ */
 
-[data-theme="dark"] {
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-card: #1e293b;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-tertiary: #64748b;
-  --border: #334155;
-  --purple: #a78bfa;
-  --purple-soft: rgba(167, 139, 250, 0.15);
-  --blue: #60a5fa;
-  --green: #34d399;
-  --yellow: #fbbf24;
-  --red: #f87171;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
-  --shadow-lg: 0 8px 24px rgba(0,0,0,0.4);
-}
-
-[data-theme="dark"] .home-card,
-[data-theme="dark"] .topic-card,
-[data-theme="dark"] .ds-card,
-[data-theme="dark"] .practice-question,
-[data-theme="dark"] .practice-result,
-[data-theme="dark"] .setting-item,
-[data-theme="dark"] .achievement-card {
-  background: var(--bg-card);
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .home-page,
-[data-theme="dark"] .settings-list,
-[data-theme="dark"] .topics-section {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] body {
-  background: var(--bg-primary);
-}
-
-[data-theme="dark"] .sidebar {
-  background: linear-gradient(180deg, #0c1222 0%, #1a1f3a 100%);
-}
-
 :root {
   --purple: #8b5cf6;
   --blue: #3b82f6;
@@ -75,6 +31,56 @@
   --radius-xl: 28px;
   --radius-full: 9999px;
   --sidebar-width: 260px;
+}
+
+/* Dark mode overrides — MUST come after :root so they win */
+[data-theme="dark"] {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-card: #1e293b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
+  --border: #334155;
+  --purple: #a78bfa;
+  --purple-soft: rgba(167, 139, 250, 0.15);
+  --blue: #60a5fa;
+  --green: #34d399;
+  --yellow: #fbbf24;
+  --red: #f87171;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+[data-theme="dark"] body {
+  background: var(--bg-primary);
+}
+
+[data-theme="dark"] .sidebar {
+  background: linear-gradient(180deg, #0c1222 0%, #1a1f3a 100%);
+}
+
+[data-theme="dark"] .home-card,
+[data-theme="dark"] .topic-card,
+[data-theme="dark"] .ds-card,
+[data-theme="dark"] .practice-question,
+[data-theme="dark"] .practice-result,
+[data-theme="dark"] .setting-item,
+[data-theme="dark"] .achievement-card {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .home-page,
+[data-theme="dark"] .settings-list,
+[data-theme="dark"] .topics-section {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .mobile-menu-btn {
+  background: var(--bg-card);
+  color: var(--text-primary);
 }
 
 * {
