@@ -21,7 +21,22 @@ function isActiveRoute(currentPage, route) {
 
 export default function Layout({ children, currentPage, onNavigate, xp, level, settings }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [expandedModules, setExpandedModules] = useState(() => {
+    const initial = {};
+    NAV_SECTIONS.forEach(subject => {
+      subject.modules.forEach(mod => {
+        if (mod.topics.length > 0) {
+          initial[mod.id] = true;
+        }
+      });
+    });
+    return initial;
+  });
   const prefersReduced = settings?.reducedMotion || false;
+
+  const toggleModule = (moduleId) => {
+    setExpandedModules(prev => ({ ...prev, [moduleId]: !prev[moduleId] }));
+  };
 
   return (
     <div className="app-layout">
@@ -48,26 +63,55 @@ export default function Layout({ children, currentPage, onNavigate, xp, level, s
 
           {NAV_SECTIONS.map(subject => (
             <div key={subject.id} className="nav-section">
-              <div className="nav-section-title">{subject.title}</div>
+              <div className="nav-section-title">{subject.icon} {subject.title}</div>
               {subject.modules.map(mod => (
                 <div key={mod.id} className="nav-module">
                   {mod.topics.length > 0 ? (
-                    mod.topics
-                      .filter(t => t.route)
-                      .sort((a, b) => (a.order || 0) - (b.order || 0))
-                      .map(topic => (
-                        <button
-                          key={topic.id}
-                          className={`nav-item nav-item-topic ${isActiveRoute(currentPage, topic.route) ? 'active' : ''}`}
-                          onClick={() => { onNavigate(topic.route); setSidebarOpen(false); }}
+                    <>
+                      <button
+                        className={`nav-item nav-module-toggle ${expandedModules[mod.id] ? 'expanded' : ''}`}
+                        onClick={() => toggleModule(mod.id)}
+                      >
+                        <span className="nav-icon">{mod.icon}</span>
+                        <span className="nav-label">{mod.title}</span>
+                        <motion.span
+                          className="nav-expand-arrow"
+                          animate={{ rotate: expandedModules[mod.id] ? 90 : 0 }}
+                          transition={{ duration: 0.2 }}
                         >
-                          <span className="nav-icon">{topic.icon}</span>
-                          <span className="nav-label">{topic.title}</span>
-                          {isActiveRoute(currentPage, topic.route) && (
-                            <motion.div className="nav-indicator" layoutId="navIndicator" />
-                          )}
-                        </button>
-                      ))
+                          ›
+                        </motion.span>
+                      </button>
+                      <AnimatePresence>
+                        {expandedModules[mod.id] && (
+                          <motion.div
+                            className="nav-topics-list"
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            {mod.topics
+                              .filter(t => t.route)
+                              .sort((a, b) => (a.order || 0) - (b.order || 0))
+                              .map(topic => (
+                                <button
+                                  key={topic.id}
+                                  className={`nav-item nav-item-topic ${isActiveRoute(currentPage, topic.route) ? 'active' : ''}`}
+                                  onClick={() => { onNavigate(topic.route); setSidebarOpen(false); }}
+                                >
+                                  <span className="nav-icon">{topic.icon}</span>
+                                  <span className="nav-label">{topic.title}</span>
+                                  {isActiveRoute(currentPage, topic.route) && (
+                                    <motion.div className="nav-indicator" layoutId="navIndicator" />
+                                  )}
+                                </button>
+                              ))
+                            }
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </>
                   ) : (
                     <div className="nav-item nav-item-coming-soon">
                       <span className="nav-icon">{mod.icon}</span>

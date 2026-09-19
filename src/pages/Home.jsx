@@ -1,21 +1,149 @@
+import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import Mascot from '../components/Mascot/Mascot';
 import DailyChallenge from '../components/DailyChallenge/DailyChallenge';
 import XPBar from '../components/XPBar/XPBar';
+import { getAllTopics } from '../curriculum';
+import { dailyQuestionPool } from '../data/questionBank';
+
+const QUICK_ACTIONS = [
+  { icon: '📖', label: 'Learn', desc: 'Explore concepts', route: 'natural' },
+  { icon: '✏️', label: 'Practice', desc: 'Solve questions', route: 'primes' },
+  { icon: '🎯', label: 'Quiz', desc: 'Test your knowledge', route: 'quiz' },
+];
+
+function getDailyQuestion() {
+  const today = new Date();
+  const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
+  return dailyQuestionPool[dayOfYear % dailyQuestionPool.length];
+}
+
+function QuestionOfTheDay({ onNavigate }) {
+  const dailyQ = useMemo(() => getDailyQuestion(), []);
+  const [answered, setAnswered] = useState(false);
+  const [selected, setSelected] = useState(null);
+
+  if (!dailyQ) return null;
+
+  const handleSubmit = () => {
+    if (selected === null) return;
+    setAnswered(true);
+  };
+
+  const isCorrect = selected === dailyQ.answer;
+
+  return (
+    <motion.div
+      className="home-card home-daily-question"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.1 }}
+    >
+      <div className="home-card-header">
+        <span className="home-card-icon">💡</span>
+        <h3>Question of the Day</h3>
+      </div>
+      <p className="home-dq-question">{dailyQ.q}</p>
+      <div className="home-dq-options">
+        {dailyQ.options.map((opt, i) => (
+          <button
+            key={i}
+            className={`home-dq-option ${selected === i ? 'selected' : ''} ${answered && i === dailyQ.answer ? 'correct' : ''} ${answered && selected === i && !isCorrect ? 'wrong' : ''}`}
+            onClick={() => !answered && setSelected(i)}
+            disabled={answered}
+          >
+            {opt}
+          </button>
+        ))}
+      </div>
+      {!answered ? (
+        <button className="home-dq-submit" onClick={handleSubmit} disabled={selected === null}>
+          Check Answer
+        </button>
+      ) : (
+        <div className={`home-dq-result ${isCorrect ? 'correct' : 'wrong'}`}>
+          {isCorrect ? '✓ Correct!' : `✗ Incorrect. ${dailyQ.explanation}`}
+        </div>
+      )}
+      {dailyQ.topic && (
+        <button className="home-dq-topic-link" onClick={() => onNavigate(dailyQ.topic)}>
+          Explore this topic →
+        </button>
+      )}
+    </motion.div>
+  );
+}
+
+function ContinueLearning({ progress, onNavigate }) {
+  const lastTopic = progress?.lastVisitedTopic;
+  const totalCorrect = progress?.totalCorrect || 0;
+  const totalAnswered = progress?.totalAnswered || 0;
+  const numbersExplored = progress?.numbersExplored?.length || 0;
+
+  if (!lastTopic && totalAnswered === 0 && numbersExplored === 0) return null;
+
+  const allTopics = getAllTopics();
+  const topic = lastTopic ? allTopics.find(t => t.route === lastTopic) : allTopics[0];
+
+  if (!topic) return null;
+
+  const accuracy = totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) : 0;
+
+  return (
+    <motion.div
+      className="home-card home-continue"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2 }}
+    >
+      <div className="home-card-header">
+        <span className="home-card-icon">📚</span>
+        <h3>Continue Learning</h3>
+      </div>
+      <div className="home-continue-info">
+        <div className="home-continue-topic">
+          <span className="home-continue-icon">{topic.icon}</span>
+          <div>
+            <strong>{topic.title}</strong>
+            <span className="home-continue-desc">{topic.description}</span>
+          </div>
+        </div>
+        {totalAnswered > 0 && (
+          <div className="home-continue-stats">
+            <div className="home-stat">
+              <span className="home-stat-value">{numbersExplored}</span>
+              <span className="home-stat-label">Explored</span>
+            </div>
+            <div className="home-stat">
+              <span className="home-stat-value">{accuracy}%</span>
+              <span className="home-stat-label">Accuracy</span>
+            </div>
+            <div className="home-stat">
+              <span className="home-stat-value">{totalCorrect}</span>
+              <span className="home-stat-label">Correct</span>
+            </div>
+          </div>
+        )}
+      </div>
+      <button className="home-continue-btn" onClick={() => onNavigate(topic.route)}>
+        Continue →
+      </button>
+    </motion.div>
+  );
+}
 
 const TOPIC_CARDS = [
-  { key: 'natural', icon: '🌱', title: 'Natural Numbers', desc: 'Counting starts here!', color: '#4ade80', gradient: 'linear-gradient(135deg, #4ade80, #22c55e)' },
-  { key: 'even-odd', icon: '🍎', title: 'Even & Odd', desc: 'Can you pair them all?', color: '#60a5fa', gradient: 'linear-gradient(135deg, #60a5fa, #3b82f6)' },
-  { key: 'integers', icon: '➕➖', title: 'Integers', desc: 'Explore both sides of zero!', color: '#a78bfa', gradient: 'linear-gradient(135deg, #a78bfa, #8b5cf6)' },
-  { key: 'primes', icon: '⭐', title: 'Prime Numbers', desc: 'Meet the special numbers!', color: '#fbbf24', gradient: 'linear-gradient(135deg, #fbbf24, #f59e0b)' },
-  { key: 'factor-tree', icon: '🌳', title: 'Prime Factor Tree', desc: 'Grow numbers into primes!', color: '#34d399', gradient: 'linear-gradient(135deg, #34d399, #10b981)' },
-  { key: 'direction-sense', icon: '🧭', title: 'Direction Sense', desc: 'Navigate with logic & reasoning!', color: '#e6b94f', gradient: 'linear-gradient(135deg, #e6b94f, #d69e2e)' },
-  { key: 'quiz', icon: '🎮', title: 'Quiz Time', desc: 'Test your number skills!', color: '#f472b6', gradient: 'linear-gradient(135deg, #f472b6, #ec4899)' },
+  { key: 'natural', icon: '🌱', title: 'Number Basics', desc: 'Natural numbers, whole numbers & types', color: '#4ade80' },
+  { key: 'even-odd', icon: '🍎', title: 'Even & Odd', desc: 'Can you pair them all?', color: '#60a5fa' },
+  { key: 'primes', icon: '⭐', title: 'Prime Numbers', desc: 'Meet the special numbers!', color: '#fbbf24' },
+  { key: 'divisibility', icon: '✂️', title: 'Divisibility', desc: 'Quick tricks for 2-10', color: '#f472b6' },
+  { key: 'factor-tree', icon: '🌳', title: 'Factor Tree', desc: 'Grow numbers into primes!', color: '#34d399' },
+  { key: 'direction-sense', icon: '🧭', title: 'Direction Sense', desc: 'Navigate with logic!', color: '#e6b94f' },
 ];
 
 const FLOATING_NUMBERS = ['1', '2', '3', '5', '7', '8', '11', '13', '17', '42', '100'];
 
-export default function Home({ onNavigate, xp, level, onDailyComplete, dailyCompleted }) {
+export default function Home({ onNavigate, xp, level, onDailyComplete, dailyCompleted, progress }) {
   return (
     <div className="home-page">
       <div className="floating-background">
@@ -58,23 +186,70 @@ export default function Home({ onNavigate, xp, level, onDailyComplete, dailyComp
             🌈 APTIFY
           </motion.h1>
           <p className="hero-subtitle">Explore numbers. Discover patterns. Become a Number Detective!</p>
-          
+
           <div className="hero-mascot-row">
             <Mascot mood="happy" message="Hi, Young Explorer! 👋" size={70} />
           </div>
-          
+
           <div className="hero-xp-section">
             <XPBar xp={xp} level={level} />
           </div>
         </motion.div>
       </section>
 
-      <section className="daily-section">
-        <DailyChallenge onComplete={onDailyComplete} dailyCompleted={dailyCompleted} />
-      </section>
+      <div className="home-dashboard">
+        <div className="home-dashboard-left">
+          <QuestionOfTheDay onNavigate={onNavigate} />
+          <ContinueLearning progress={progress} onNavigate={onNavigate} />
+        </div>
+        <div className="home-dashboard-right">
+          <motion.div
+            className="home-card home-quick-actions"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+          >
+            <div className="home-card-header">
+              <span className="home-card-icon">⚡</span>
+              <h3>Quick Actions</h3>
+            </div>
+            <div className="home-qa-grid">
+              {QUICK_ACTIONS.map((action, i) => (
+                <motion.button
+                  key={i}
+                  className="home-qa-btn"
+                  onClick={() => onNavigate(action.route)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <span className="home-qa-icon">{action.icon}</span>
+                  <strong>{action.label}</strong>
+                  <span className="home-qa-desc">{action.desc}</span>
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="home-card"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25 }}
+          >
+            <div className="home-card-header">
+              <span className="home-card-icon">🔥</span>
+              <h3>Daily Challenge</h3>
+            </div>
+            <p className="home-dc-desc">Can you solve today's number puzzle?</p>
+            <button className="home-dc-btn" onClick={() => onNavigate('quiz')}>
+              Start Challenge →
+            </button>
+          </motion.div>
+        </div>
+      </div>
 
       <section className="topics-section">
-        <h2 className="section-title">Let's discover the magic of numbers together!</h2>
+        <h2 className="section-title">Explore Topics</h2>
         <div className="topics-grid">
           {TOPIC_CARDS.map((card, i) => (
             <motion.button
@@ -84,7 +259,7 @@ export default function Home({ onNavigate, xp, level, onDailyComplete, dailyComp
               onClick={() => onNavigate(card.key)}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1, type: 'spring', stiffness: 200 }}
+              transition={{ delay: i * 0.08, type: 'spring', stiffness: 200 }}
               whileHover={{ y: -8, scale: 1.02, boxShadow: `0 12px 30px ${card.color}33` }}
               whileTap={{ scale: 0.97 }}
             >

@@ -1,14 +1,17 @@
-import { useState, useCallback, Suspense, lazy } from 'react';
+import { useState, useCallback, Suspense, lazy, useMemo } from 'react';
 import Layout from './components/Layout/Layout';
-import TopicPage from './components/TopicPage/TopicPage';
+import TopicPageLayout from './components/TopicPageLayout/TopicPageLayout';
 import Home from './pages/Home';
 import Achievements from './pages/Achievements';
 import Settings from './pages/Settings';
 const QuizPage = lazy(() => import('./pages/QuizPage'));
 import Confetti from './components/Confetti/Confetti';
+import Practice from './components/Practice/Practice';
+import TopicQuiz from './components/TopicQuiz/TopicQuiz';
 import { getProgress, saveState, addXP, clearAllState } from './utils/storage';
 import { checkAchievements } from './data/achievements';
 import { getTopicByRoute } from './curriculum';
+import { questionBank } from './data/questionBank';
 
 export default function App() {
   const [progress, setProgress] = useState(() => getProgress());
@@ -28,6 +31,7 @@ export default function App() {
 
   const handleNavigate = useCallback((page) => {
     setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   const handleExplore = useCallback((n) => {
@@ -77,7 +81,7 @@ export default function App() {
     persistProgress({
       totalAnswered: (progress.totalAnswered || 0) + 1,
     });
-  }, [progress, persistProgress]);
+  }, [persistProgress]);
 
   const handleDailyComplete = useCallback(() => {
     const newXP = addXP(25);
@@ -123,7 +127,7 @@ export default function App() {
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
-        return <Home onNavigate={handleNavigate} xp={progress.xp} level={progress.level} onDailyComplete={handleDailyComplete} dailyCompleted={false} />;
+        return <Home onNavigate={handleNavigate} xp={progress.xp} level={progress.level} onDailyComplete={handleDailyComplete} dailyCompleted={false} progress={progress} />;
       case 'quiz':
         return (
           <Suspense fallback={<div className="topic-loading"><div className="loading-spinner" /><p>Loading quiz...</p></div>}>
@@ -138,17 +142,38 @@ export default function App() {
         const topic = getTopicByRoute(currentPage);
         if (topic && topic.component) {
           const Component = topic.component;
+          const bankKey = topic.questionBankKey;
+          const bankData = bankKey ? questionBank[bankKey] : null;
           const extraProps = {};
           if (currentPage === 'explorer') extraProps.onExplore = handleExplore;
           if (currentPage === 'divisibility') extraProps.onExplore = handleExplore;
-          if (currentPage === 'factor-tree') extraProps.onTreeComplete = handleTreeComplete;
+          if (currentPage === 'factor-tree') {
+            extraProps.onTreeComplete = handleTreeComplete;
+            extraProps.onXP = (xp) => {
+              const newXP = addXP(xp);
+              persistProgress({ xp: newXP.xp, level: newXP.level });
+            };
+          }
           return (
-            <TopicPage topic={topic} onBack={() => handleNavigate('home')}>
+            <TopicPageLayout
+              topic={topic}
+              onBack={() => handleNavigate('home')}
+              practiceContent={
+                bankData && bankData.practice
+                  ? <Practice questions={bankData.practice} />
+                  : <div className="topic-loading"><p>Practice questions coming soon!</p></div>
+              }
+              quizContent={
+                bankData && bankData.quiz
+                  ? <TopicQuiz questions={bankData.quiz} onCorrect={handleQuizCorrect} onWrong={handleQuizWrong} />
+                  : <div className="topic-loading"><p>Quiz questions coming soon!</p></div>
+              }
+            >
               <Component {...extraProps} />
-            </TopicPage>
+            </TopicPageLayout>
           );
         }
-        return <Home onNavigate={handleNavigate} xp={progress.xp} level={progress.level} onDailyComplete={handleDailyComplete} dailyCompleted={false} />;
+        return <Home onNavigate={handleNavigate} xp={progress.xp} level={progress.level} onDailyComplete={handleDailyComplete} dailyCompleted={false} progress={progress} />;
       }
     }
   };

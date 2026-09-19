@@ -44,6 +44,7 @@ export const curriculum = {
               description: 'Explore any number and discover its properties.',
               route: 'explorer',
               component: NumberExplorer,
+              questionBankKey: 'explorer',
               type: 'interactive',
             },
             {
@@ -55,7 +56,8 @@ export const curriculum = {
               description: 'Natural numbers, whole numbers, integers, and more.',
               route: 'natural',
               component: NaturalNumbers,
-              type: 'learn',
+              questionBankKey: 'natural',
+              type: 'interactive',
             },
             {
               id: 'even-odd',
@@ -66,6 +68,7 @@ export const curriculum = {
               description: 'Can you pair them all?',
               route: 'even-odd',
               component: EvenOdd,
+              questionBankKey: 'even-odd',
               type: 'interactive',
             },
             {
@@ -77,6 +80,7 @@ export const curriculum = {
               description: 'Explore both sides of zero!',
               route: 'integers',
               component: Integers,
+              questionBankKey: 'integers',
               type: 'interactive',
             },
             {
@@ -88,7 +92,8 @@ export const curriculum = {
               description: 'Meet the special numbers!',
               route: 'primes',
               component: PrimeNumbers,
-              type: 'learn',
+              questionBankKey: 'primes',
+              type: 'interactive',
             },
             {
               id: 'divisibility',
@@ -96,9 +101,10 @@ export const curriculum = {
               icon: '✂️',
               order: 5,
               difficulty: 'intermediate',
-              description: 'Quick tricks to check divisibility by 2–10.',
+              description: 'Quick tricks to check divisibility by 2-10.',
               route: 'divisibility',
               component: DivisibilityRules,
+              questionBankKey: 'divisibility',
               type: 'interactive',
             },
             {
@@ -110,6 +116,7 @@ export const curriculum = {
               description: 'Grow numbers into their prime factors!',
               route: 'factor-tree',
               component: PrimeFactorTreePage,
+              questionBankKey: 'factor-tree',
               type: 'interactive',
             },
             {
@@ -121,6 +128,7 @@ export const curriculum = {
               description: 'Find the Highest Common Factor and Least Common Multiple.',
               route: 'hcf-lcm',
               component: HcfLcmPage,
+              questionBankKey: 'hcf-lcm',
               type: 'interactive',
             },
             {
@@ -132,6 +140,7 @@ export const curriculum = {
               description: 'Division, remainders, and the remainder formula.',
               route: 'remainders',
               component: RemaindersPage,
+              questionBankKey: 'remainders',
               type: 'interactive',
             },
             {
@@ -143,6 +152,7 @@ export const curriculum = {
               description: 'Patterns in the last digit of powers.',
               route: 'unit-digit',
               component: UnitDigitPage,
+              questionBankKey: 'unit-digit',
               type: 'interactive',
             },
             {
@@ -154,7 +164,8 @@ export const curriculum = {
               description: 'Commutative, associative, distributive, and more.',
               route: 'properties',
               component: PropertiesPage,
-              type: 'learn',
+              questionBankKey: 'properties',
+              type: 'interactive',
             },
             {
               id: 'fractions',
@@ -162,9 +173,10 @@ export const curriculum = {
               icon: '🍕',
               order: 11,
               difficulty: 'intermediate',
-              description: 'Parts of a whole — visual fraction models.',
+              description: 'Parts of a whole - visual fraction models.',
               route: 'fractions',
               component: FractionsPage,
+              questionBankKey: 'fractions',
               type: 'interactive',
             },
             {
@@ -176,6 +188,7 @@ export const curriculum = {
               description: 'Decimal place value, operations, and conversions.',
               route: 'decimals',
               component: DecimalsPage,
+              questionBankKey: 'decimals',
               type: 'interactive',
             },
             {
@@ -184,9 +197,10 @@ export const curriculum = {
               icon: '💻',
               order: 13,
               difficulty: 'advanced',
-              description: 'Binary, octal, hexadecimal — how numbers work in different bases.',
+              description: 'Binary, octal, hexadecimal - how numbers work in different bases.',
               route: 'bases',
               component: BasesPage,
+              questionBankKey: 'bases',
               type: 'interactive',
             },
           ],
@@ -224,6 +238,7 @@ export const curriculum = {
               description: 'Learn directions, turns, shadows, and movement tracking.',
               route: 'direction-sense',
               component: DirectionSensePage,
+              questionBankKey: 'direction-sense',
               type: 'interactive',
             },
           ],
