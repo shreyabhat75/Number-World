@@ -322,6 +322,43 @@ export const questionBank = {
       { q: 'If you face South and turn to face East, you make a turn to the:', options: ['Left', 'Right', 'Back', 'No turn'], answer: 0, explanation: 'When facing South, East is to your left. So you turn left.' },
       { q: 'If you face West and turn 135 degrees clockwise, which direction do you face?', options: ['North-East', 'South-East', 'North-West', 'South-West'], answer: 0, explanation: 'West is 270 degrees. Going 135 clockwise: 270+135 = 405 = 45 degrees = North-East.' }
     ]
+  },
+
+  'odd-one-out': {
+    practice: [
+      { q: 'Apple, Mango, Banana, Carrot — which is the odd one out?', options: ['Apple', 'Mango', 'Banana', 'Carrot'], answer: 3, explanation: 'Apple, mango and banana are fruits. Carrot is a vegetable.' },
+      { q: 'Spoon, Fork, Knife, Cup — which does not belong?', options: ['Spoon', 'Fork', 'Knife', 'Cup'], answer: 3, explanation: 'Spoon, fork and knife are cutlery used for eating. A cup is a drinking vessel.' },
+      { q: 'Square, Rectangle, Triangle, Sphere — which is the odd one out?', options: ['Square', 'Rectangle', 'Triangle', 'Sphere'], answer: 3, explanation: 'Square, rectangle and triangle are flat 2D shapes. A sphere is a solid 3D shape.' },
+      { q: '3, 5, 7, 9, 11 — which number is NOT prime?', options: ['3', '5', '7', '9'], answer: 3, explanation: '9 = 3 x 3, so it has factors 1, 3 and 9. Every other number here has exactly two factors.' },
+      { q: '16, 25, 36, 48, 49 — which is NOT a perfect square?', options: ['16', '36', '48', '49'], answer: 2, explanation: '16 = 4², 25 = 5², 36 = 6², 49 = 7². No whole number squared gives 48.' },
+      { q: '15, 20, 25, 30, 36 — which is NOT a multiple of 5?', options: ['15', '25', '30', '36'], answer: 3, explanation: 'Multiples of 5 end in 0 or 5. 36 ends in 6, so it is not a multiple of 5.' },
+      { q: 'ACE, BDF, CEG, DHL — which group breaks the pattern?', options: ['ACE', 'BDF', 'CEG', 'DHL'], answer: 3, explanation: 'Each letter in ACE, BDF and CEG skips exactly one letter. D to H skips three letters.' },
+      { q: 'MOM, DAD, POP, DOG — which is the odd one out?', options: ['MOM', 'DAD', 'POP', 'DOG'], answer: 3, explanation: 'MOM, DAD and POP read the same forwards and backwards (palindromes). DOG does not.' },
+      { q: '4, 7, 10, 13, 15 — which number breaks the rule?', options: ['4', '10', '13', '15'], answer: 3, explanation: 'The rule is add 3 each time: 4, 7, 10, 13, 16. So 15 breaks the pattern.' },
+      { q: 'Rose, Lily, Tulip, Lotus, Mango — which does not belong?', options: ['Rose', 'Lily', 'Lotus', 'Mango'], answer: 3, explanation: 'Rose, lily, tulip and lotus are flowers. Mango is a fruit.' },
+      { q: '11, 22, 33, 44, 45 — which is the odd one out?', options: ['11', '33', '44', '45'], answer: 3, explanation: 'In 11, 22, 33 and 44 both digits are identical. In 45 the digits are different.' },
+      { q: 'Cube, Sphere, Cylinder, Square — which does not belong?', options: ['Cube', 'Sphere', 'Cylinder', 'Square'], answer: 3, explanation: 'Cube, sphere and cylinder are 3D solids. A square is a flat 2D shape.' }
+    ],
+    quiz: [
+      { q: '12, 18, 24, 31, 36 — which is the odd one out?', options: ['12', '24', '31', '36'], answer: 2, explanation: 'All except 31 are even and divisible by 6. 31 is prime and not divisible by 2.' },
+      { q: 'A, E, I, O, B — which letter does not belong?', options: ['A', 'I', 'O', 'B'], answer: 3, explanation: 'A, E, I and O are vowels. B is a consonant.' },
+      { q: 'Spoon, Fork, Knife, Cup — what rule groups three of them?', options: ['They are all liquids', 'They are cutlery', 'They are fruits', 'They are 3D shapes'], answer: 1, explanation: 'Spoon, fork and knife are all cutlery. A cup is not.' },
+      { q: 'Which set has an odd one out because of prime numbers?', options: ['2, 4, 6, 8', '3, 5, 7, 9, 11', '1, 4, 9, 16', '10, 20, 30, 40'], answer: 1, explanation: 'In 3, 5, 7, 9, 11 only 9 is not prime — it equals 3 x 3.' },
+      { q: 'Circle, Square, Triangle, Rectangle — which has no corners?', options: ['Circle', 'Square', 'Triangle', 'Rectangle'], answer: 0, explanation: 'A circle is one continuous curve with zero corners. The others have 3 or 4 corners.' },
+      { q: '1/2, 2/4, 3/6, 4/8, 2/3 — which fraction has a different value?', options: ['2/4', '3/6', '4/8', '2/3'], answer: 3, explanation: '2/4, 3/6 and 4/8 all simplify to 1/2. 2/3 is greater than 1/2.' },
+      { q: '11, 22, 33, 44, 45 — which breaks the twin-digit rule?', options: ['11', '33', '45', '44'], answer: 2, explanation: '45 has two different digits, while every other number repeats its digit.' },
+      { q: 'Which is the odd one out: 81, 64, 49, 45, 36?', options: ['81', '64', '45', '36'], answer: 2, explanation: '81 = 9², 64 = 8², 49 = 7², 36 = 6². 45 is not a perfect square.' },
+      { q: 'In ACE, BDF, CEG, DHL the common rule is:', options: ['Each group has 3 letters', 'Each next letter skips exactly one letter', 'All letters are vowels', 'Letters are in reverse order'], answer: 1, explanation: 'A→C→E, B→D→F and C→E→G each skip one letter. D→H→L skips three letters each time.' },
+      { q: 'Which is the odd one out: Rose, Lily, Tulip, Lotus, Mango?', options: ['Rose', 'Tulip', 'Lotus', 'Mango'], answer: 3, explanation: 'Rose, lily, tulip and lotus are flowers. Mango is a fruit.' },
+      { q: '2, 3, 5, 8, 11 — which number does not belong?', options: ['2', '3', '8', '11'], answer: 2, explanation: '2, 3, 5 and 11 are prime. 8 = 2 x 2 x 2, so it is composite.' },
+      { q: 'Which group of shapes is the odd one out: Cube, Sphere, Cylinder, Square?', options: ['Cube', 'Sphere', 'Cylinder', 'Square'], answer: 3, explanation: 'Cube, sphere and cylinder are 3-dimensional. Square is 2-dimensional.' },
+      { q: '15, 20, 25, 30, 36 — which number is NOT a multiple of 5?', options: ['20', '25', '36', '30'], answer: 2, explanation: 'Multiples of 5 always end in 0 or 5. 36 ends in 6.' },
+      { q: '4, 7, 10, 13, 15 — what is the rule of the pattern?', options: ['Add 2 each time', 'Add 3 each time', 'Double each time', 'Add 4 each time'], answer: 1, explanation: 'The rule is +3: 4, 7, 10, 13, 16 — so 15 is the item that breaks it.' },
+      { q: 'While solving Odd One Out, the best final step is to:', options: ['Guess quickly', 'Explain the common rule aloud', 'Pick the first item', 'Skip the question'], answer: 1, explanation: 'A puzzle is only solved when you can state the rule that the odd item fails.' },
+      { q: 'Triangle, Square, Rhombus, Rectangle — which has only 3 sides?', options: ['Square', 'Rhombus', 'Triangle', 'Rectangle'], answer: 2, explanation: 'Square, rhombus and rectangle all have 4 sides. A triangle has 3.' },
+      { q: 'MOM, DAD, POP, DOG — what rule do the first three share?', options: ['They are all animals', 'They are palindromes', 'They have 3 letters each', 'They are colours'], answer: 1, explanation: 'A palindrome reads the same forwards and backwards. DOG becomes GOD, so it is not a palindrome.' },
+      { q: 'Which is the odd one out: 22, 44, 63, 88, 110?', options: ['22', '63', '88', '110'], answer: 1, explanation: '22, 44, 88 and 110 are all multiples of 11. 63 is not.' }
+    ]
   }
 };
 
@@ -355,5 +392,8 @@ export const dailyQuestionPool = [
   { q: 'Morning shadows fall towards the:', options: ['East', 'West', 'North', 'South'], answer: 1, explanation: 'In the morning, the sun is in the east, so shadows fall towards the west.', topic: 'direction-sense' },
   { q: 'What is 2 to the power of 5?', options: ['16', '32', '64', '128'], answer: 1, explanation: '2^5 = 2 x 2 x 2 x 2 x 2 = 32.', topic: 'natural' },
   { q: 'What is 5/6 - 1/6?', options: ['4/6', '2/3', 'Both are correct', '4/12'], answer: 2, explanation: '5/6 - 1/6 = 4/6 = 2/3. Both are correct.', topic: 'fractions' },
-  { q: 'A number divisible by both 2 and 3 must be divisible by:', options: ['5', '6', '12', '8'], answer: 1, explanation: 'If divisible by 2 and 3, the number is divisible by 6.', topic: 'divisibility' }
+  { q: 'A number divisible by both 2 and 3 must be divisible by:', options: ['5', '6', '12', '8'], answer: 1, explanation: 'If divisible by 2 and 3, the number is divisible by 6.', topic: 'divisibility' },
+  { q: 'Apple, Mango, Banana, Carrot — the odd one out is:', options: ['Apple', 'Mango', 'Banana', 'Carrot'], answer: 3, explanation: 'Carrot is a vegetable; the rest are fruits.', topic: 'odd-one-out' },
+  { q: 'Which does not belong: Square, Rectangle, Triangle, Sphere?', options: ['Square', 'Rectangle', 'Triangle', 'Sphere'], answer: 3, explanation: 'Sphere is a 3D solid; the others are flat 2D shapes.', topic: 'odd-one-out' },
+  { q: '9 is the odd one out among 3, 5, 7, 9, 11 because:', options: ['It is even', 'It is not prime', 'It is too small', 'It is a square'], answer: 1, explanation: '9 = 3 x 3, so it has more than two factors and is not prime.', topic: 'odd-one-out' }
 ];

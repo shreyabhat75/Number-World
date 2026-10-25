@@ -138,6 +138,7 @@ const TOPIC_CARDS = [
   { key: 'divisibility', icon: '✂️', title: 'Divisibility', desc: 'Quick tricks for 2-10', color: '#f472b6' },
   { key: 'factor-tree', icon: '🌳', title: 'Factor Tree', desc: 'Grow numbers into primes!', color: '#34d399' },
   { key: 'direction-sense', icon: '🧭', title: 'Direction Sense', desc: 'Navigate with logic!', color: '#e6b94f' },
+  { key: 'odd-one-out', icon: '🎯', title: 'Odd One Out', desc: 'Spot the item that breaks the rule!', color: '#f472b6' },
 ];
 
 const FLOATING_NUMBERS = ['1', '2', '3', '5', '7', '8', '11', '13', '17', '42', '100'];
