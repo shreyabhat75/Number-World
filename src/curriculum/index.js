@@ -16,6 +16,7 @@ const FractionsPage = lazy(() => import('../pages/FractionsPage'));
 const DecimalsPage = lazy(() => import('../pages/DecimalsPage'));
 const BasesPage = lazy(() => import('../pages/BasesPage'));
 const DirectionSensePage = lazy(() => import('../pages/DirectionSensePage'));
+const OddOneOutPage = lazy(() => import('../pages/OddOneOutPage'));
 
 export const curriculum = {
   id: 'aptify',
@@ -239,6 +240,18 @@ export const curriculum = {
               route: 'direction-sense',
               component: DirectionSensePage,
               questionBankKey: 'direction-sense',
+              type: 'interactive',
+            },
+            {
+              id: 'odd-one-out',
+              title: 'Odd One Out',
+              icon: '🎯',
+              order: 1,
+              difficulty: 'beginner',
+              description: 'Find the item that breaks the common rule!',
+              route: 'odd-one-out',
+              component: OddOneOutPage,
+              questionBankKey: 'odd-one-out',
               type: 'interactive',
             },
           ],
