@@ -359,6 +359,63 @@ export const questionBank = {
       { q: 'MOM, DAD, POP, DOG — what rule do the first three share?', options: ['They are all animals', 'They are palindromes', 'They have 3 letters each', 'They are colours'], answer: 1, explanation: 'A palindrome reads the same forwards and backwards. DOG becomes GOD, so it is not a palindrome.' },
       { q: 'Which is the odd one out: 22, 44, 63, 88, 110?', options: ['22', '63', '88', '110'], answer: 1, explanation: '22, 44, 88 and 110 are all multiples of 11. 63 is not.' }
     ]
+  },
+
+  'articles-prepositions': {
+    practice: [
+      { q: 'She is ___ engineer.', options: ['a', 'an', 'the', 'no article'], answer: 1, explanation: '“Engineer” begins with a vowel sound, so we use “an”.' },
+      { q: 'I bought ___ apple from the market.', options: ['a', 'an', 'the', 'no article'], answer: 1, explanation: '“Apple” starts with a vowel sound → an apple.' },
+      { q: '___ sun rises in the east.', options: ['A', 'An', 'The', 'no article'], answer: 2, explanation: 'There is only one sun — it is unique, so it takes “the”.' },
+      { q: 'I saw a dog. ___ dog was barking loudly.', options: ['A', 'An', 'The', 'no article'], answer: 2, explanation: 'The dog is now specific (second mention), so we use “the”.' },
+      { q: 'He is ___ honest man.', options: ['a', 'an', 'the', 'no article'], answer: 1, explanation: 'The “h” in honest is silent, so the first sound is a vowel → an honest man.' },
+      { q: 'It took ___ hour to reach the station.', options: ['a', 'an', 'the', 'no article'], answer: 1, explanation: 'Silent “h” in hour → the first sound is a vowel → an hour.' },
+      { q: '___ dogs are loyal animals.', options: ['A', 'An', 'The', 'no article'], answer: 3, explanation: 'Plural nouns used in a general sense take no article (zero article).' },
+      { q: 'She speaks ___ English fluently.', options: ['a', 'an', 'the', 'no article'], answer: 3, explanation: 'Languages take no article: she speaks English.' },
+      { q: 'We had ___ breakfast at 8 AM.', options: ['a', 'an', 'the', 'no article'], answer: 3, explanation: 'Meals in a general sense take no article: we had breakfast.' },
+      { q: 'Rahul lives in ___ Bengaluru.', options: ['a', 'an', 'the', 'no article'], answer: 3, explanation: 'Names of cities normally take no article.' },
+      { q: 'I need ___ information about the exam.', options: ['a', 'an', 'the', 'no article'], answer: 3, explanation: '“Information” is uncountable, so it never takes a/an. (Say “some information” if you need a quantity word.)' },
+      { q: 'He is ___ university student.', options: ['a', 'an', 'the', 'no article'], answer: 0, explanation: '“University” starts with the sound “yoo” — a consonant sound — so we use “a”.' },
+      { q: 'Give me ___ piece of advice.', options: ['a', 'an', 'the', 'no article'], answer: 0, explanation: 'Uncountable nouns take a quantity phrase: a piece of advice, a glass of water, a loaf of bread.' },
+      { q: '___ tallest building in the city is open to visitors.', options: ['A', 'An', 'The', 'no article'], answer: 2, explanation: 'Superlatives always take “the”: the tallest, the best, the fastest.' },
+      { q: 'She was ___ first to finish the race.', options: ['a', 'an', 'the', 'no article'], answer: 2, explanation: 'Ordinal numbers (first, second, third) take “the”.' },
+      { q: 'He has ___ MBA degree.', options: ['a', 'an', 'the', 'no article'], answer: 1, explanation: 'M is pronounced “em”, which begins with a vowel sound → an MBA.' },
+      { q: 'The meeting is ___ 5 PM sharp.', options: ['at', 'on', 'in', 'no preposition'], answer: 0, explanation: 'Clock times take “at”: at 5 PM, at noon, at midnight.' },
+      { q: 'I will meet you ___ Monday.', options: ['at', 'on', 'in', 'no preposition'], answer: 1, explanation: 'Days of the week take “on”: on Monday, on Friday.' },
+      { q: 'We travel to Ooty ___ January.', options: ['at', 'on', 'in', 'no preposition'], answer: 2, explanation: 'Months, years and seasons take “in”: in January, in 2026, in summer.' },
+      { q: 'He goes for a walk ___ night.', options: ['at', 'on', 'in', 'no preposition'], answer: 0, explanation: '“At night” is fixed. Compare: in the morning, in the afternoon, in the evening.' },
+      { q: 'The picture hangs ___ the wall.', options: ['at', 'on', 'in', 'no preposition'], answer: 1, explanation: 'Something touching a surface uses “on”: on the wall, on the table.' },
+      { q: 'She is waiting ___ the bus stop.', options: ['at', 'on', 'in', 'no preposition'], answer: 0, explanation: 'A bus stop is a point/location in place → at the bus stop.' },
+      { q: 'We walked ___ the bridge to reach the park.', options: ['across', 'at', 'through', 'into'], answer: 0, explanation: '“Across” means from one side of something to the other: across the bridge, across the road.' },
+      { q: 'The ball rolled ___ the tunnel and disappeared.', options: ['across', 'through', 'between', 'at'], answer: 1, explanation: '“Through” means movement inside something and out the other side: through the tunnel.' },
+      { q: 'She sat ___ Tom and Ravi.', options: ['among', 'between', 'beside', 'into'], answer: 1, explanation: '“Between” is used for two people/things; “among” is used for more than two.' },
+      { q: 'I have lived here ___ 2019.', options: ['for', 'since', 'from', 'in'], answer: 1, explanation: '“Since” takes a starting point (since 2019); “for” takes a duration (for five years).' }
+    ],
+    quiz: [
+      { q: '___ hour ago, the train left the platform.', options: ['A', 'An', 'The', 'No article'], answer: 1, explanation: 'Silent “h” in hour → starts with a vowel sound → an hour.' },
+      { q: 'France is ___ European country.', options: ['a', 'an', 'the', 'no article'], answer: 0, explanation: 'European starts with the “yu” sound — a consonant sound — so we use “a”.' },
+      { q: 'She is ___ only student who solved it.', options: ['a', 'an', 'the', 'no article'], answer: 2, explanation: 'Words like “only”, superlatives and ordinals take “the”.' },
+      { q: '___ moon goes around the Earth.', options: ['A', 'An', 'The', 'no article'], answer: 2, explanation: 'Unique objects take “the”: the moon, the Earth, the sky.' },
+      { q: '___ gold is a precious metal.', options: ['A', 'An', 'The', 'no article'], answer: 3, explanation: 'Uncountable nouns used in a general sense take no article.' },
+      { q: 'Please return ___ book you borrowed.', options: ['a', 'an', 'the', 'no article'], answer: 2, explanation: 'It is a specific book both people know about → the book.' },
+      { q: '___ children love playing outdoors.', options: ['A', 'An', 'The', 'no article'], answer: 3, explanation: 'A general statement about all children → zero article.' },
+      { q: 'He went to bed ___ 10 PM.', options: ['at', 'on', 'in', 'no preposition'], answer: 0, explanation: 'Clock time takes “at”. Also note: “go to bed” takes no article — the place is for sleeping.' },
+      { q: 'The festival falls ___ 15 August.', options: ['at', 'on', 'in', 'no preposition'], answer: 1, explanation: 'Dates take “on”: on 15 August, on my birthday.' },
+      { q: 'It gets cold ___ the evening.', options: ['at', 'on', 'in', 'no preposition'], answer: 2, explanation: 'Parts of the day take “in” — in the morning/afternoon/evening — but “at night”.' },
+      { q: 'He has been ill ___ three days.', options: ['since', 'for', 'from', 'in'], answer: 1, explanation: '“For” is used with a length of time: for three days, for two hours.' },
+      { q: 'We have known each other ___ 2015.', options: ['for', 'since', 'from', 'in'], answer: 1, explanation: '“Since” marks the starting point: since 2015.' },
+      { q: 'The book was written ___ Mahatma Gandhi.', options: ['by', 'with', 'from', 'of'], answer: 0, explanation: 'The doer/agent of an action is introduced with “by”.' },
+      { q: 'She travelled ___ bus to Chennai.', options: ['by', 'on', 'in', 'at'], answer: 0, explanation: 'With means of transport we use “by”: by bus, by train, by air (no article).' },
+      { q: 'The swimmers crossed ___ the river.', options: ['across', 'through', 'at', 'on'], answer: 0, explanation: 'From one bank to the other is “across”: across the river, across the street.' },
+      { q: 'The sunlight came ___ the window and lit the room.', options: ['through', 'across', 'at', 'between'], answer: 0, explanation: 'Light passes inside and out → through the window.' },
+      { q: 'The milk is ___ the fridge.', options: ['in', 'on', 'at', 'across'], answer: 0, explanation: 'Inside an enclosed space uses “in”: in the fridge, in the box.' },
+      { q: 'The school is ___ the bank and the library.', options: ['among', 'between', 'beside', 'into'], answer: 1, explanation: 'Exactly two things → “between”. Use “among” for more than two.' },
+      { q: 'He is afraid ___ dogs.', options: ['of', 'from', 'by', 'with'], answer: 0, explanation: 'Fixed preposition: afraid of, proud of, fond of, tired of.' },
+      { q: 'She is married ___ a doctor.', options: ['to', 'with', 'for', 'by'], answer: 0, explanation: 'We say “married to” someone, not “married with”.' },
+      { q: 'I am interested ___ learning French.', options: ['in', 'on', 'at', 'for'], answer: 0, explanation: 'Fixed preposition: interested in, good at, excited about.' },
+      { q: 'This version is different ___ the previous one.', options: ['from', 'than', 'to', 'of'], answer: 0, explanation: 'Standard English uses “different from”. (Careful: not “different than” in formal writing.)' },
+      { q: 'Which sentence means she is a student?', options: ['She goes to the school every day.', 'She goes to school every day.', 'She went to the school to play.', 'She is at the school now.'], answer: 1, explanation: '“Go to school” without an article means attending it as a student. With “the”, it only names the building.' },
+      { q: 'Which sentence is correct?', options: ['I need a water.', 'I need an water.', 'I need water.', 'I need the water every day.'], answer: 2, explanation: 'Uncountable nouns like water never take a/an. To express quantity say “a glass of water”.' }
+    ]
   }
 };
 
@@ -395,5 +452,7 @@ export const dailyQuestionPool = [
   { q: 'A number divisible by both 2 and 3 must be divisible by:', options: ['5', '6', '12', '8'], answer: 1, explanation: 'If divisible by 2 and 3, the number is divisible by 6.', topic: 'divisibility' },
   { q: 'Apple, Mango, Banana, Carrot — the odd one out is:', options: ['Apple', 'Mango', 'Banana', 'Carrot'], answer: 3, explanation: 'Carrot is a vegetable; the rest are fruits.', topic: 'odd-one-out' },
   { q: 'Which does not belong: Square, Rectangle, Triangle, Sphere?', options: ['Square', 'Rectangle', 'Triangle', 'Sphere'], answer: 3, explanation: 'Sphere is a 3D solid; the others are flat 2D shapes.', topic: 'odd-one-out' },
-  { q: '9 is the odd one out among 3, 5, 7, 9, 11 because:', options: ['It is even', 'It is not prime', 'It is too small', 'It is a square'], answer: 1, explanation: '9 = 3 x 3, so it has more than two factors and is not prime.', topic: 'odd-one-out' }
+  { q: '9 is the odd one out among 3, 5, 7, 9, 11 because:', options: ['It is even', 'It is not prime', 'It is too small', 'It is a square'], answer: 1, explanation: '9 = 3 x 3, so it has more than two factors and is not prime.', topic: 'odd-one-out' },
+  { q: 'He is ___ honest man.', options: ['a', 'an', 'the', 'no article'], answer: 1, explanation: 'The h in honest is silent, so it begins with a vowel sound → an honest man.', topic: 'articles-prepositions' },
+  { q: 'The meeting is ___ 5 PM.', options: ['at', 'on', 'in', 'no preposition'], answer: 0, explanation: 'Clock times take the preposition “at”.', topic: 'articles-prepositions' }
 ];

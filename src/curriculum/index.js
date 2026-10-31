@@ -17,6 +17,7 @@ const DecimalsPage = lazy(() => import('../pages/DecimalsPage'));
 const BasesPage = lazy(() => import('../pages/BasesPage'));
 const DirectionSensePage = lazy(() => import('../pages/DirectionSensePage'));
 const OddOneOutPage = lazy(() => import('../pages/OddOneOutPage'));
+const ArticlesPrepositionsPage = lazy(() => import('../pages/ArticlesPrepositionsPage'));
 
 export const curriculum = {
   id: 'aptify',
@@ -252,6 +253,35 @@ export const curriculum = {
               route: 'odd-one-out',
               component: OddOneOutPage,
               questionBankKey: 'odd-one-out',
+              type: 'interactive',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'verbal',
+      title: 'Verbal Ability',
+      icon: '📚',
+      color: '#14b8a6',
+      modules: [
+        {
+          id: 'english-grammar',
+          title: 'English Grammar',
+          icon: '✍️',
+          color: '#06b6d4',
+          description: 'Articles, prepositions, tenses, and more.',
+          topics: [
+            {
+              id: 'articles-prepositions',
+              title: 'Articles & Prepositions',
+              icon: '📝',
+              order: 0,
+              difficulty: 'beginner',
+              description: 'Master a, an, the, zero article and time/place/direction prepositions.',
+              route: 'articles-prepositions',
+              component: ArticlesPrepositionsPage,
+              questionBankKey: 'articles-prepositions',
               type: 'interactive',
             },
           ],
